@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom';
+import TJLogo from '../assets/TJ-logo.jpg';
 import './Sidebar.css';
 
 const Sidebar = () => {
   return (
     <div className="sidebar">
+      <div className="logo-container">
+        <Link to="/">
+          <img src={TJLogo} alt="TJ Logo" className="sidebar-logo" />
+        </Link>
+      </div>
       <nav className="sidebar-nav">
         <ul>
           <li>
