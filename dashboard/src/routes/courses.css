@@ -1,0 +1,18 @@
+.course-dashboard {
+    padding: 40px;
+    background-color: #DE9151;
+}
+
+
+.h1 {
+   text-align: center;
+}
+
+.card{
+    font-size: large;
+    margin: 2%;
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+}
