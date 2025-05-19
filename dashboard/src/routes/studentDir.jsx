@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import { students } from "../data/liststudents";
-import "../components/Sidebar.css"; // ensure the CSS (including main/.main-list/.main-footer) is loaded
+import "../components/Sidebar.css"; 
 import AddStudent from "../components/AddStudentToTJ";
 import EditStudent from "../components/EditStudent";
 export default function StudentDirectory() {
@@ -10,7 +10,7 @@ export default function StudentDirectory() {
       <Sidebar />
 
       <main>
-        {/* 1) scrollable list */}
+        {/*scrollable list */}
         <div className="main-list">
           {students.map((student, i) => (
             <div
@@ -44,7 +44,7 @@ export default function StudentDirectory() {
           ))}
         </div>
 
-        {/* 2) footer with always‐visible button */}
+        {/* footer*/}
         <div className="main-footer">
           <AddStudent/>
         </div>

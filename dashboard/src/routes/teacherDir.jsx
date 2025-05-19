@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import { teachers } from "../data/listteachers";
-import "../components/Sidebar.css"; // ensure the CSS (including main/.main-list/.main-footer) is loaded
+import "../components/Sidebar.css";
 import AddTeacher from "../components/AddTeacherToTJ";
 import EditTeacher from "../components/EditTeacher";
 
@@ -11,7 +11,7 @@ export default function TeacherDirectory() {
       <Sidebar />
 
       <main>
-        {/* 1) scrollable list */}
+        {/* scrollable list */}
         <div className="main-list">
           {teachers.map((teacher, i) => (
             <div
@@ -45,7 +45,7 @@ export default function TeacherDirectory() {
           ))}
         </div>
 
-        {/* 2) footer with always‐visible button */}
+        {/*footer*/}
         <div className="main-footer">
           <AddTeacher/>
         </div>
