@@ -127,6 +127,7 @@ export default function ClassPage() {
                 </tr>
             </thead>
             <tbody>
+              {/* currently automating this part */}
                 {}
             </tbody>
             </table>
