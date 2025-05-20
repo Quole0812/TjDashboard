@@ -1,9 +1,51 @@
 import { useParams } from "react-router-dom";
 import Sidebar from '../components/Sidebar';
+import { useEffect, useState } from "react";
 import "./ClassPage.css";
+import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export default function ClassPage() {
   const { id } = useParams();
+
+  const[classData, setClassData] = useState(null);
+  const[studentData, setStudentData] = useState([]);
+
+  
+  useEffect(() => {
+    const fetchClassData = async () => {
+      try {
+        const classRef = doc(db, "classes", id);
+        const classSnap = await getDoc(classRef);
+
+        if (classSnap.exists()) {
+          setClassData(classSnap.data());
+          console.log(classSnap.data());
+        try {
+          console.log("bruh")
+          if (classSnap.data().studentID?.length) {
+            const studentFetches = classSnap.data().studentID.map(async (ref) => {
+              const snap = await getDoc(ref);
+              return { id: ref.id, ...snap.data() };
+            });
+            const allStudents = await Promise.all(studentFetches);
+            setStudentData(allStudents);
+            console.log(allStudents);
+          }
+          console.log(studentData);
+        } catch (e2) {
+          console.error("Error fetching student:", e2);
+        }
+        } else {
+          console.log("no class bruh");
+        }
+      } catch (error) {
+        console.error("Error fetching class:", error);
+      }
+    };
+
+    fetchClassData();
+  }, [id]);
 
   return (
     <div className="page-layout">
@@ -12,7 +54,9 @@ export default function ClassPage() {
         {/* <h2 className="h2classpage">Class page for {id}</h2> */}
         {/* gonna make placeholder now  */}
           <div className="classpage-header">
-            <h1 className="class-title">Mrs. Johnson Class.</h1>
+            <h1 className="class-title">
+              {classData ? `${classData.name} Class` : "Loading..."}
+            </h1>
             <button className="dashboard-button">Teacher Dashboard</button>
         </div>
 
