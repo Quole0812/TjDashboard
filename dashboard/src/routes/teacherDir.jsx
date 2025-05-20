@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import { teachers } from "../data/listteachers";
-import "../components/Sidebar.css";
+import "./student.css"
 import AddTeacher from "../components/AddTeacherToTJ";
 import EditTeacher from "../components/EditTeacher";
 

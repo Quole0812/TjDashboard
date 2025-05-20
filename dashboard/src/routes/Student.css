@@ -1,0 +1,71 @@
+/* Student.css */
+
+/* parent flex container: sidebar + page content */
+.layout {
+    display: flex;
+    height: 100vh;        /* or whatever fits your layout */
+  }
+  
+  /* wrap everything to the right of the sidebar */
+  .content {
+    flex: 1;              /* fill remaining width */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* floating button inside content (still fixed in content flow) */
+  .main-footer {
+    align-self: flex-end; /* push to the right */
+    margin: 1rem 20px 0;  /* top gap + horizontal gutters */
+    background: black;
+    margin-bottom:5vh;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* your scroll‐area: equal gutters on left & right */
+  .scroll-container {
+    flex: 1;              /* fill remaining vertical space */
+    margin: 1rem 1vw;    /* 1rem top/bottom, 20px left/right */
+    overflow-y: auto;
+    margin-top:10vh;
+    padding: 2rem;
+    height: 90vh;
+    width: 80vw;
+    box-sizing: border-box;
+    background: white;
+    border: 2px solid black;
+    border-radius: 8px;
+  }
+  .scroll-container::-webkit-scrollbar {
+  display: none;               /* Chrome, Safari, Opera */
+}
+  
+  /* grid for each student row */
+  .student-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    color: #000;
+    border: none;
+    box-shadow: none;
+  }
+  
+  /* flatten wrappers */
+  .card-row {
+    display: contents;
+  }
+  
+  .student-button {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: #007aff;
+    cursor: pointer;
+  }
+  
