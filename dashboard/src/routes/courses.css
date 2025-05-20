@@ -20,7 +20,11 @@
     width: 75%;
 }
 */
-
+html, body{
+  margin: 0;
+  padding: 0;
+  background-color: #242424;
+}
 .courses-container {
   display: flex;
   width: 100vw;
@@ -41,7 +45,7 @@
 }
 
 .add-course-btn {
-  border: 1px solid whitesmoke;
+  border: 1px solid black;
   border-radius: 999px;
   padding: 8px 16px;
   cursor: pointer;
@@ -71,6 +75,7 @@
 }
 
 .course-card {
+  color: white;
   background-color: black;
   padding: 20px;
   border-radius: 12px;

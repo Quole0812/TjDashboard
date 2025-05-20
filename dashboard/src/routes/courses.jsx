@@ -60,6 +60,7 @@ export default Courses;
 
 import { useState } from 'react';
 import Sidebar from '../components/Sidebar';
+import { Link } from 'react-router-dom';
 import './courses.css';
 
 const Courses = () => {
@@ -114,15 +115,20 @@ const Courses = () => {
               {row.map((course, colIndex) => (
                 <div className="column" key={colIndex}>
                   {course && (
-                    <div className="course-card">
-                      <div className="card-header">
-                        <h2>{course.teacher}</h2>
+                    <Link class="card-link"
+                      to={`/courses/${course.teacherId}`}
+                      className="card-link"
+                    >
+                      <div className="course-card">
+                        <div className="card-header">
+                          <h2>{course.teacher}</h2>
+                        </div>
+                        <p className="label">Teacher ID</p>
+                        <p className="value">{course.teacherId}</p>
+                        <p className="label">Grade Level</p>
+                        <p className="value">{course.gradeLevel}</p>
                       </div>
-                      <p className="label">Teacher ID</p>
-                      <p className="value">{course.teacherId}</p>
-                      <p className="label">Grade Level</p>
-                      <p className="value">{course.gradeLevel}</p>
-                    </div>
+                    </Link>
                   )}
                 </div>
               ))}
