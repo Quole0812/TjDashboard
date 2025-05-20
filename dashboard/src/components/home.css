@@ -1,0 +1,91 @@
+/* dashboard/src/routes/home.css */
+.home-root {
+    min-height: 100vh;
+    min-width: 100vw;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    background-image: url('../assets/TJ-school.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    box-sizing: border-box;
+}
+.home-root::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 44, 44, 0.6); /* semi-transparent grey */
+    z-index: 0;
+    pointer-events: none;
+}
+.home-header, .home-widgets, .home-dashboard-title {
+    position: relative;
+    z-index: 1;
+}
+.home-header {
+    height: 100px;
+    background: #112456;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* .home-bg-img {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    z-index: 1;
+} */
+/* .home-header-content {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 32px;
+} */
+.home-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    object-fit: cover;
+    background: #fff;
+    margin-right: 32px;
+}
+.home-school-name {
+    color: #fff;
+    font-size: 2.5rem;
+    margin: 0;
+    font-family: 'Crimson Text';
+    font-style: normal;
+    font-weight: 100;
+}
+.home-dashboard-title {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+.home-dashboard-title-align {
+    margin-left: 6%; /* Adjust this value to match the left edge of the widgets */
+    margin-top: 40px;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 400;
+    z-index: 1;
+    position: relative;
+}
+.home-widgets {
+    margin-left: 5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 60px;
+    padding: 40px 0;
+    gap: 20px;
+    margin-right: 5%;
+}

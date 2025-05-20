@@ -1,0 +1,33 @@
+  .dashboard-widget {
+    flex: 1 1 40%;
+    margin: 20px;
+    text-decoration: none;
+    border-radius: 25px;
+    overflow: hidden;
+    background: #1A1A18;
+    color: #fff;
+    min-width: 300px;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+  }
+  .dashboard-widget:hover {
+    transform: translateY(-5px) scale(1.03);
+  }
+  
+  .dashboard-widget-spacer {
+    flex: 1 1 auto;
+  }
+  
+  .dashboard-widget-title {
+    background: #fff;
+    color: #222;
+    width: 100%;
+    padding: 20px;
+    font-size: 1.3rem;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-sizing: border-box;
+  }
