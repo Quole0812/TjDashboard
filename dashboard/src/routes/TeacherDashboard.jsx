@@ -1,16 +1,27 @@
 import './TeacherDash.css';
 import { FaEdit, FaTimes } from 'react-icons/fa';
+import fetchStudents, { addStudent, addTeacher, editStudent } from "../utils/students";
+import React, { useEffect, useState } from 'react';
 
 const instructors = [
   { name: 'Jane Johnson', email: 'jane.smith@school.edu', phone: '(222) 222-2222' },
 ];
 
-const students = [
-  { id: '87654321', name: 'Joe', grade: 'A+' },
-  { id: '87654321', name: 'Joseph', grade: 'A+' },
-];
-
 const TeacherDashboard = () => {
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchStudents();
+        setStudents(data);
+      } catch (error) {
+        console.error("Could not fetch students", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <main className="main-content">
       {/* Header */}
@@ -28,7 +39,7 @@ const TeacherDashboard = () => {
         </div>
         <div className="stat-card">
           <div className="stat-title">Students Enrolled</div>
-          <div className="stat-value">22</div>
+          <div className="stat-value">{students.length}</div>
         </div>
         <div className="stat-card">
           <div className="stat-title">Contact Information</div>
@@ -72,10 +83,10 @@ const TeacherDashboard = () => {
           </thead>
           <tbody>
             {students.map((student, idx) => (
-              <tr key={idx}>
-                <td>{student.name}</td>
-                <td>{student.id}</td>
-                <td>{student.grade}</td>
+              <tr key={student.id || idx}>
+                <td>{student.name || student.studentName}</td>
+                <td>{student.id || student.studentId}</td>
+                <td>{student.grade || student.studentGrade}</td>
                 <td className="action-icons">
                   <button className="icon-btn" title="Edit"><FaEdit /></button>
                   <button className="icon-btn" title="Delete"><FaTimes /></button>
