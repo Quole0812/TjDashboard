@@ -104,8 +104,10 @@ export default function ClassPage() {
                 <p className="stat-value">B+</p>
             </div>
             <div className="stat-card">
-                <h3>Student Enrolled</h3>
-                <p className="stat-value">22</p>
+                <h3>
+                  Student Enrolled
+                </h3>
+                <p className="stat-value">{studentData ? `${studentData.length}` : "Loading..."}</p>
             </div>
             <div className="stat-card">
                 <h3>Contact Information</h3>
@@ -125,16 +127,7 @@ export default function ClassPage() {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                <td>John Doe</td>
-                <td>87654321</td>
-                <td className="grade">A+</td>
-                </tr>
-                <tr>
-                <td>Jane Avery</td>
-                <td>87654322</td>
-                <td className="grade">A</td>
-                </tr>
+                {}
             </tbody>
             </table>
         </div>
