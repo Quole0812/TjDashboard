@@ -11,6 +11,7 @@ export default function ClassPage() {
   const[classData, setClassData] = useState(null);
   const[studentData, setStudentData] = useState([]);
   const[teacherData, setTeacherData] = useState([]);
+  const [gradesData, setGradesData] = useState([]);
 
   
   useEffect(() => {
@@ -32,6 +33,24 @@ export default function ClassPage() {
             });
             const allStudents = await Promise.all(studentFetches);
             setStudentData(allStudents);
+            try {
+              const gradesQuery = query(
+                collection(db, "grades"),
+                where("classID", "==", classRef) //match ref here
+              );
+              const gradeSnaps = await getDocs(gradesQuery);
+
+              // match grade for the student in da class
+              const studentRefIds = classSnap.data().studentID.map(ref => ref.id);
+              const filteredGrades = gradeSnaps.docs
+                .filter(g => studentRefIds.includes(g.data().studentID.id))
+                .map(g => ({ id: g.id, ...g.data() }));
+
+              setGradesData(filteredGrades);
+              console.log(filteredGrades);
+            } catch (e3) {
+              console.error("Error fetching grades:", e3);
+            }
             console.log(allStudents)
           }
         } catch (e2) {
@@ -53,6 +72,7 @@ export default function ClassPage() {
           console.error("Error fetching teacher:", e2);
         }
 
+        //getting grades
 
         } else {
           console.log("no class bruh");
