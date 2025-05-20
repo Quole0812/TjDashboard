@@ -12,13 +12,24 @@
     display: flex;
     flex-direction: column;
   }
-  
+  .categories {
+    margin-left: 250px;
+    width: 80vw; /* Or set a max-width if needed */
+    background: white;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 1rem;
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 0.75rem 1rem;
+  }
   /* floating button inside content (still fixed in content flow) */
   .main-footer {
     align-self: flex-end; /* push to the right */
-    margin: 1rem 20px 0;  /* top gap + horizontal gutters */
-    background: black;
-    margin-bottom:5vh;
+    margin-left: 40vw;
+    margin-right: 2vw;
+    background: white;
+    margin-bottom:1vh;
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 4px;
@@ -27,11 +38,13 @@
   
   /* your scroll‐area: equal gutters on left & right */
   .scroll-container {
-    flex: 1;              /* fill remaining vertical space */
-    margin: 1rem 1vw;    /* 1rem top/bottom, 20px left/right */
+
+    flex: 1;               /* fill remaining vertical space */
+   margin: 1rem 40px;    
     overflow-y: auto;
-    margin-top:10vh;
+    margin-top: 1vh;
     padding: 2rem;
+    margin-left: 250px;
     height: 90vh;
     width: 80vw;
     box-sizing: border-box;
