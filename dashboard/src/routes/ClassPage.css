@@ -1,0 +1,52 @@
+.h2classpage {
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 2rem;
+}
+
+main {
+  margin-left: 250px; /* Matches sidebar width */
+  padding: 2rem;
+}
+
+.classpage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stats-container {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}
+
+.stat-card {
+  flex: 1;
+  background-color: #eee;
+  /* padding: 1rem; */
+  text-align: center;
+}
+
+.stat-value {
+    font-size: 3.5rem;
+}
+
+.roster-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.roster-table th,
+.roster-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ccc;
+  background-color: #eee;
+  text-align: left;
+}
+
+.grade {
+  font-weight: bold;
+}

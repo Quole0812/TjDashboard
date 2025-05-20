@@ -9,6 +9,25 @@
   color: white;
 }
 
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.sidebar-logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-logo:hover {
+  transform: scale(1.05);
+}
+
 .sidebar-nav ul {
   list-style: none;
   padding: 0;
