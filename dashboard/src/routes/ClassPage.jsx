@@ -10,6 +10,7 @@ export default function ClassPage() {
 
   const[classData, setClassData] = useState(null);
   const[studentData, setStudentData] = useState([]);
+  const[teacherData, setTeacherData] = useState([]);
 
   
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function ClassPage() {
         if (classSnap.exists()) {
           setClassData(classSnap.data());
           console.log(classSnap.data());
+        //student list 
         try {
           console.log("bruh")
           if (classSnap.data().studentID?.length) {
@@ -30,12 +32,28 @@ export default function ClassPage() {
             });
             const allStudents = await Promise.all(studentFetches);
             setStudentData(allStudents);
-            console.log(allStudents);
+            console.log(allStudents)
           }
-          console.log(studentData);
         } catch (e2) {
           console.error("Error fetching student:", e2);
         }
+        //teacher list 
+        try {
+          console.log("bruh 2")
+          if (classSnap.data().teacherID?.length) {
+            const teacherFetches = classSnap.data().teacherID.map(async (ref) => {
+              const snap2 = await getDoc(ref);
+              return { id: ref.id, ...snap2.data() };
+            });
+            const allTeachers = await Promise.all(teacherFetches);
+            setTeacherData(allTeachers);
+            console.log(allTeachers);
+          }
+        } catch (e2) {
+          console.error("Error fetching teacher:", e2);
+        }
+
+
         } else {
           console.log("no class bruh");
         }
