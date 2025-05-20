@@ -241,4 +241,11 @@
 .event-action.delete:hover {
   color: #ff6b6b;
   background: rgba(255, 105, 105, 0.1);
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #555;
 } 

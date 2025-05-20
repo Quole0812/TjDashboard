@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     element: <TeacherDirectory />,
   },
   {
-    path: '/students',
+    path: '/students', 
     element: <StudentDirectory />,
   },
   {

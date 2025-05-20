@@ -1,57 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday, addMonths, subMonths, parseISO, startOfWeek, endOfWeek } from 'date-fns';
 import { FaChevronLeft, FaChevronRight, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../../firebase';
 import EventPopup from './EventPopup';
 import './Calendar.css';
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      name: "Math Club Meeting",
-      date: "2025-05-15",
-      startTime: "15:30",
-      endTime: "16:30",
-    },
-    {
-      id: 2,
-      name: "Science Fair",
-      date: "2025-05-20",
-      startTime: "09:00",
-      endTime: "14:00",
-    },
-    {
-      id: 3,
-      name: "Parent-Teacher Conference",
-      date: "2025-05-25",
-      startTime: "16:00",
-      endTime: "19:00",
-    },
-    {
-      id: 4,
-      name: "School Assembly",
-      date: "2025-06-02",
-      startTime: "10:00",
-      endTime: "11:00",
-    },
-    {
-      id: 5,
-      name: "Basketball Game",
-      date: "2025-06-15",
-      startTime: "17:00",
-      endTime: "19:00",
-    },
-    {
-      id: 6,
-      name: "End of Year Party",
-      date: "2025-06-20",
-      startTime: "14:00",
-      endTime: "17:00",
-    }
-  ]);
+  const [events, setEvents] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch events from Firestore
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+        const eventsCollection = collection(db, 'events');
+        const eventSnapshot = await getDocs(eventsCollection);
+        const eventsList = eventSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setEvents(eventsList);
+      } catch (error) {
+        console.error("Error fetching events: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
@@ -81,25 +63,44 @@ const Calendar = () => {
     setShowPopup(true);
   };
 
-  const handleDeleteEvent = (eventId) => {
-    setEvents(events.filter(event => event.id !== eventId));
+  const handleDeleteEvent = async (eventId) => {
+    try {
+      // Delete from Firestore
+      await deleteDoc(doc(db, 'events', eventId));
+      
+      // Update local state
+      setEvents(events.filter(event => event.id !== eventId));
+    } catch (error) {
+      console.error("Error deleting event: ", error);
+    }
   };
 
-  const handleSubmitEvent = (eventData) => {
-    if (currentEvent) {
-      // Edit existing event
-      setEvents(events.map(event => 
-        event.id === currentEvent.id 
-          ? { ...eventData, id: currentEvent.id } 
-          : event
-      ));
-    } else {
-      // Add new event
-      const newEvent = {
-        ...eventData,
-        id: Date.now(), // Simple way to generate unique IDs
-      };
-      setEvents([...events, newEvent]);
+  const handleSubmitEvent = async (eventData) => {
+    try {
+      if (currentEvent) {
+        // Edit existing event in Firestore
+        const eventRef = doc(db, 'events', currentEvent.id);
+        await updateDoc(eventRef, eventData);
+        
+        // Update local state
+        setEvents(events.map(event => 
+          event.id === currentEvent.id 
+            ? { ...eventData, id: currentEvent.id } 
+            : event
+        ));
+      } else {
+        // Add new event to Firestore
+        const docRef = await addDoc(collection(db, 'events'), eventData);
+        
+        // Update local state with the new event including the Firestore ID
+        const newEvent = {
+          ...eventData,
+          id: docRef.id,
+        };
+        setEvents([...events, newEvent]);
+      }
+    } catch (error) {
+      console.error("Error saving event: ", error);
     }
   };
 
@@ -135,58 +136,62 @@ const Calendar = () => {
         </div>
       </div>
       
-      <div className="calendar-grid">
-        <div className="calendar-weekdays">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="weekday">{day}</div>
-          ))}
-        </div>
-        
-        <div className="calendar-days">
-          {days.map(day => {
-            const dayEvents = getEventsForDay(day);
-            const isCurrentMonth = isSameMonth(day, currentDate);
-            return (
-              <div 
-                key={day.toString()} 
-                className={`calendar-day ${isToday(day) ? 'today' : ''} ${!isCurrentMonth ? 'other-month' : ''}`}
-              >
-                <span className="day-number">{format(day, 'd')}</span>
-                <div className="day-events">
-                  {dayEvents.map(event => (
-                    <div key={event.id} className="event">
-                      <div className="event-time">
-                        {formatDisplayTime(event.startTime)} - {formatDisplayTime(event.endTime)}
+      {loading ? (
+        <div className="loading">Loading events...</div>
+      ) : (
+        <div className="calendar-grid"> 
+          <div className="calendar-weekdays">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+              <div key={day} className="weekday">{day}</div>
+            ))}
+          </div>
+          
+          <div className="calendar-days">
+            {days.map(day => {
+              const dayEvents = getEventsForDay(day);
+              const isCurrentMonth = isSameMonth(day, currentDate);
+              return (
+                <div 
+                  key={day.toString()} 
+                  className={`calendar-day ${isToday(day) ? 'today' : ''} ${!isCurrentMonth ? 'other-month' : ''}`}
+                >
+                  <span className="day-number">{format(day, 'd')}</span>
+                  <div className="day-events">
+                    {dayEvents.map(event => (
+                      <div key={event.id} className="event">
+                        <div className="event-time">
+                          {formatDisplayTime(event.startTime)} - {formatDisplayTime(event.endTime)}
+                        </div>
+                        <div className="event-name">{event.name}</div>
+                        <div className="event-actions">
+                          <button 
+                            className="event-action edit" 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditEvent(event);
+                            }}
+                          >
+                            <FaEdit />
+                          </button>
+                          <button 
+                            className="event-action delete" 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteEvent(event.id);
+                            }}
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
                       </div>
-                      <div className="event-name">{event.name}</div>
-                      <div className="event-actions">
-                        <button 
-                          className="event-action edit" 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEditEvent(event);
-                          }}
-                        >
-                          <FaEdit />
-                        </button>
-                        <button 
-                          className="event-action delete" 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteEvent(event.id);
-                          }}
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       <EventPopup
         isOpen={showPopup}
