@@ -7,7 +7,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 const TeacherDashboard = () => {
-  const { id: classId } = useParams();
+  const { id } = useParams();
   const [students, setStudents] = useState([]);
   const [instructors, setInstructors] = useState([]);
   const [classTeachers, setClassTeachers] = useState([]);
@@ -28,7 +28,7 @@ const TeacherDashboard = () => {
         setInstructors(teachersData);
 
         // fetch class doc
-        const classRef = doc(db, "classes", classId);
+        const classRef = doc(db, "classes", id);
         const classSnap = await getDoc(classRef);
 
         if (classSnap.exists()) {
@@ -36,20 +36,20 @@ const TeacherDashboard = () => {
           setClassTeachers(classDoc.teacherIDs || []);
           setClassStudents(classDoc.studentIDs || []);
         } else {
-          console.warn("No such class document!");
+          console.warn("No such class document.");
         }
       } catch (error) {
         console.error("Could not fetch students, teachers, or class", error);
       }
     };
     fetchData();
-  }, [classId]);
+  }, [id]);
 
   // add Teacher to class
   const handleAddTeacherToClass = async (teacherId) => {
     setError('');
     try {
-      await updateClassTeachers(classId, teacherId);
+      await updateClassTeachers(id, teacherId);
       setClassTeachers((prev) => [...new Set([...prev, teacherId])]);
       setShowTeacherModal(false);
     } catch (err) {
@@ -61,7 +61,7 @@ const TeacherDashboard = () => {
   const handleAddStudentToClass = async (studentId) => {
     setError('');
     try {
-      await updateClassStudents(classId, studentId);
+      await updateClassStudents(id, studentId);
       setClassStudents((prev) => [...new Set([...prev, studentId])]);
       setShowStudentModal(false);
     } catch (err) {
@@ -95,7 +95,8 @@ const TeacherDashboard = () => {
           </div>
         </div>
       )}
-      {/* Add Student Modal */}
+
+      {/* add student modal */}
       {showStudentModal && (
         <div className="modal-overlay">
           <div className="modal">
@@ -115,14 +116,15 @@ const TeacherDashboard = () => {
           </div>
         </div>
       )}
-      {/* Header */}
+
+      {/* header */}
       <div className="dashboard-header">
         <h1 className="dashboard-title">Class Dashboard</h1>
         <button className="dashboard-btn">Teacher Dashboard</button>
       </div>
       <hr className="dashboard-divider" />
 
-      {/* Stat Cards */}
+      {/* stat cards */}
       <div className="dashboard-stats">
         <div className="stat-card">
           <div className="stat-title">Average Grade</div>
@@ -138,7 +140,7 @@ const TeacherDashboard = () => {
         </div>
       </div>
 
-      {/* Active Instructors */}
+      {/* active instructors */}
       <div className="section">
         <div className="section-header">
           <div className="section-title">Active Instructors</div>
@@ -167,7 +169,7 @@ const TeacherDashboard = () => {
         </table>
       </div>
 
-      {/* Student Roster */}
+      {/* student roster */}
       <div className="section">
         <div className="section-header">
           <div className="section-title">Student Roster</div>
