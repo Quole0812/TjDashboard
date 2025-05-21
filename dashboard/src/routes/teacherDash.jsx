@@ -4,7 +4,7 @@ import './TeacherDash.css';
 
 const TeacherDashboardPage = () => {
   return (
-    <div className="dashboard-layout">
+    <div className="dashboard-layout" style={{backgroundColor: "#E4E4E4"}}>
       <Sidebar />
       <TeacherDashboard />
     </div>
