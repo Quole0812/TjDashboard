@@ -13,14 +13,7 @@ const Courses = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [newCourse, setNewCourse] = useState({ name: '', grade: '' });
 
-  // group into rows of 3
-  {/* const rows = [];
-    for (let i = 0; i < courses.length; i += 3) {
-      const row = courses.slice(i, i + 3);
-      while (row.length < 3) row.push(null); // fill to maintain 3 columns
-      rows.push(row);
-  }
-  */}
+  
   useEffect(() => {
   const fetchCourses = async () => {
     const querySnapshot = await getDocs(collection(db, 'classes'));
@@ -43,31 +36,6 @@ const Courses = () => {
     setNewCourse((prev) => ({ ...prev, [name]: value }));
   };
 
-  {/* const handleAddCourse = async () => {
-  if (newCourse.name && newCourse.grade) {
-    try {
-      const docRef = await addDoc(collection(db, 'classes'), {
-        name: newCourse.name,
-        gradeLevel: newCourse.grade,
-        teacherID: 'placeholder-teacher-id'  // replace this with a real reference as needed
-      });
-
-      const newCourseEntry = {
-        id: docRef.id,
-        name: newCourse.name,
-        gradeLevel: newCourse.grade,
-        teacherID: 'placeholder-teacher-id'
-      };
-
-      setCourses(prev => [...prev, newCourseEntry]);
-      setModalOpen(false);
-      setNewCourse({ name: '', grade: '' });
-    } catch (error) {
-      console.error('Error adding document: ', error);
-    }
-  }
-};
-*/}
 
 const handleAddCourse = async () => {
   if (newCourse.name && newCourse.grade) {
@@ -78,7 +46,6 @@ const handleAddCourse = async () => {
         teacherID: 'placeholder-teacher-id'
       });
 
-      // fetch updated course list from Firestore
       const querySnapshot = await getDocs(collection(db, 'classes'));
       const courseList = querySnapshot.docs.map(doc => ({
         id: doc.id,
@@ -86,7 +53,6 @@ const handleAddCourse = async () => {
       }));
       setCourses(courseList);
 
-      // clear form and close modal
       setNewCourse({ name: '', grade: '' });
       setModalOpen(false);
     } catch (error) {
@@ -152,44 +118,14 @@ const handleDeleteCourse = async (courseId) => {
       </main>
 
 
-      {/* Course Addition 
-      {modalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <h2>Add Course</h2>
-            <div className="modal-field">
-              <label>Class Name:</label>
-              <input
-                type="text"
-                name="name"
-                value={newCourse.name}
-                onChange={handleFormChange}
-              />
-            </div>
-            <div className="modal-field">
-              <label>Grade Level:</label>
-              <input
-                type="text"
-                name="grade"
-                value={newCourse.grade}
-                onChange={handleFormChange}
-              />
-            </div>
-            <button className="add-course-modal-btn" onClick={handleAddCourse}>
-              + Add Course
-            </button>
-          </div>
-        </div>
-      )}
-        */}
       {modalOpen && (
   <div
     className="modal-overlay"
-    onClick={() => setModalOpen(false)} // ✅ click outside closes modal
+    onClick={() => setModalOpen(false)} 
   >
     <div
       className="modal-box"
-      onClick={(e) => e.stopPropagation()} // ✅ prevent click inside from closing
+      onClick={(e) => e.stopPropagation()} 
     >
       <h2>Add Course</h2>
       <div className="modal-field">
