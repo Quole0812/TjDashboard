@@ -13,7 +13,7 @@
     flex-direction: column;
   }
   .categories {
-    margin-left: 250px;
+    margin-left: 300px;
     width: 80vw; /* Or set a max-width if needed */
     background: white;
     border: 2px solid black;
@@ -24,18 +24,17 @@
     padding: 0.75rem 1rem;
   }
   /* floating button inside content (still fixed in content flow) */
-  .main-footer {
-    align-self: flex-end; /* push to the right */
-    margin-left: 40vw;
-    margin-right: 2vw;
-    background: white;
+  /* .main-footer {
+    align-self: flex-end; 
     margin-bottom:1vh;
-    color: white;
+    color: black;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
-  }
+  } */
   
+  
+
   /* your scroll‐area: equal gutters on left & right */
   .scroll-container {
 
@@ -44,7 +43,7 @@
     overflow-y: auto;
     margin-top: 1vh;
     padding: 2rem;
-    margin-left: 250px;
+    margin-left: 300px;
     height: 90vh;
     width: 80vw;
     box-sizing: border-box;
@@ -131,4 +130,16 @@
   .icon-button:hover {
     transform: scale(1.2);
   }
+  .main-footer {
+    margin-left: 300px;        /* offsets sidebar */
+    width: calc(100% - 300px); /* fills remaining space */
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+  }
   
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }

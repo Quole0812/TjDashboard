@@ -23,14 +23,14 @@ export default function StudentDirectory() {
   const [students, setStudents] = useState([]);
   const [noStudents, setNoStudents] = useState(false);
 
-  const deleteStudent = async(id) => {
+  const deleteStudent = async (id) => {
     try {
       await deleteDoc(doc(db, "students", id));
       fetchStudents();
     } catch (error) {
       console.error("Error deleting student: ", error);
     }
-  }
+  };
   const fetchStudents = async () => {
     try {
       console.log("Fetching students...");
@@ -60,10 +60,13 @@ export default function StudentDirectory() {
       <div className="layout">
         <div className="content">
           <div className="main-footer">
-            <AddStudentToTJ fetchStudents={fetchStudents}/>
+            <div className="header-row">
+              <h1>Student Directory</h1>
+              <AddStudentToTJ fetchStudents={fetchStudents} />
+            </div>
           </div>
           <div className="categories">
-            <div className="student-card student-entry student-header">
+            <div className="student-card student-entry">
               <p className="header-cell">Name</p>
               <p className="header-cell">ID</p>
               <p className="header-cell">Grade</p>
@@ -88,7 +91,7 @@ export default function StudentDirectory() {
                     />
                     <button
                       className="icon-button"
-                      onClick={()=>deleteStudent(student.id)}
+                      onClick={() => deleteStudent(student.id)}
                     >
                       <VscError />
                     </button>
