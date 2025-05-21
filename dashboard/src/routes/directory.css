@@ -18,10 +18,8 @@
     background: white;
     border: 2px solid black;
     border-radius: 8px;
-    padding: 1rem;
     box-sizing: border-box;
     display: inline-block;
-    padding: 0.75rem 1rem;
   }
   /* floating button inside content (still fixed in content flow) */
   /* .main-footer {
@@ -81,13 +79,10 @@
   }
   
   .student-header {
-    font-weight: bold;
-    font-size: 1.2rem;
-    
-    background-color: #fff;
-    position: sticky;
-    top: 0;
-    z-index: 1;
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr auto; /* consistent across header & rows */
+    align-items: center;
+    gap: 10px;
   }
   
   .header-cell {

@@ -66,7 +66,7 @@ export default function StudentDirectory() {
             </div>
           </div>
           <div className="categories">
-            <div className="student-card student-entry">
+            <div className="student-header">
               <p className="header-cell">Name</p>
               <p className="header-cell">ID</p>
               <p className="header-cell">Grade</p>
