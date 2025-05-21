@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { Link } from 'react-router-dom';
 
 const TeacherDashboard = () => {
   const { id } = useParams();
@@ -253,7 +254,9 @@ const TeacherDashboard = () => {
       {/* header */}
       <div className="dashboard-header">
         <h1 className="dashboard-title">{classData ? `${classData.name} Dashboard` : "Loading..."}</h1>
-        <button className="dashboard-btn">Teacher Dashboard</button>
+        <Link to={`/courses/${id}`}>
+          <button className="class-btn">Class Page</button>
+        </Link>
       </div>
       <hr className="dashboard-divider" />
 
