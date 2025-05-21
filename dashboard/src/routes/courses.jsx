@@ -14,13 +14,13 @@ const Courses = () => {
   const [newCourse, setNewCourse] = useState({ name: '', grade: '' });
 
   // group into rows of 3
-  const rows = [];
+  {/* const rows = [];
     for (let i = 0; i < courses.length; i += 3) {
       const row = courses.slice(i, i + 3);
       while (row.length < 3) row.push(null); // fill to maintain 3 columns
       rows.push(row);
   }
-
+  */}
   useEffect(() => {
   const fetchCourses = async () => {
     const querySnapshot = await getDocs(collection(db, 'classes'));
@@ -90,44 +90,39 @@ const handleDeleteCourse = async (courseId) => {
           + Add Courses
         </button>
 
-        <div className="courses-wrapper">
-          {rows.map((row, rowIndex) => (
-            <div className="row" key={rowIndex}>
-              {row.map((course, colIndex) => (
-                <div className="column" key={colIndex}>
-                  {course && (
-                    <Link className="card-link" to={`/courses/${course.id}`}>
-                      <div className="course-card">
-                        <div className="card-header">
-                          <h2>{course.name}</h2>
-                          <FaTrash
-                            className="icon delete-icon"
-                            title="Delete Course"
-                            onClick={(e) => {
-                              e.preventDefault(); 
-                              handleDeleteCourse(course.id);
-                            }}
-                          />
-                        </div>
-                        <p className="label">Teacher ID</p>
-                        <p className="value">
-                          {course.teacherID
-                            ? typeof course.teacherID === 'object'
-                              ? course.teacherID.id
-                              : course.teacherID
-                            : 'Not assigned'}
-                        </p>
-                        <p className="label">Grade Level</p>
-                        <p className="value">{course.gradeLevel}</p>
-                      </div>
-                    </Link>
-                  )}
+        <div className="courses-grid">
+          {courses.map((course) => (
+            <div className="column" key={course.id}>
+              <Link className="card-link" to={`/courses/${course.id}`}>
+                <div className="course-card">
+                  <div className="card-header">
+                    <h2>{course.name}</h2>
+                    <FaTrash
+                      className="icon delete-icon"
+                      title="Delete Course"
+                      onClick={(e) => {
+                        e.preventDefault(); 
+                        handleDeleteCourse(course.id);
+                      }}
+                    />
+                  </div>
+                  <p className="label">Teacher ID</p>
+                  <p className="value">
+                    {course.teacherID
+                      ? typeof course.teacherID === 'object'
+                        ? course.teacherID.id
+                        : course.teacherID
+                      : 'Not assigned'}
+                  </p>
+                  <p className="label">Grade Level</p>
+                  <p className="value">{course.gradeLevel}</p>
                 </div>
-              ))}
+              </Link>
             </div>
           ))}
         </div>
       </main>
+
 
       {/* Course Addition */}
       {modalOpen && (
