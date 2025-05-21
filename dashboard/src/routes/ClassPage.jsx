@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Sidebar from '../components/Sidebar';
 import { useEffect, useState } from "react";
 import "./ClassPage.css";
@@ -144,7 +144,9 @@ export default function ClassPage() {
             <h1 className="class-title">
               {classData ? `${classData.name} Class` : "Loading..."}
             </h1>
-            <button className="dashboard-button">View Instructor Page</button>
+            <Link to={`/teacherDash/${id}`}>
+              <button className="dashboard-button">View Instructor Page</button>
+            </Link>
         </div>
 
         <div className="stats-container">
