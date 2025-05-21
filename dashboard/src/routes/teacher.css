@@ -38,4 +38,16 @@
   .icon-button:hover {
     transform: scale(1.2);
   }
+  .main-footer {
+    margin-left: 300px;        /* offsets sidebar */
+    width: calc(100% - 300px); /* fills remaining space */
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+  }
   
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }

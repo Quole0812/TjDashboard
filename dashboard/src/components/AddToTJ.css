@@ -44,13 +44,26 @@
   }
   
   .add-button {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 24px;
+    color: black;
     font-size: 16px;
-    border: 2px solid gray;
-    border-radius: 30px;
-    background-color: white;
     cursor: pointer;
   }
   
+  .add-button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .add-button-icon {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* spacing between icon and text */
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: 2px solid gray;
+    border-radius: 999px; /* fully rounded */
+    background: white;
+    cursor: pointer;
+  }

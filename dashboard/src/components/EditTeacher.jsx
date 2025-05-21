@@ -9,28 +9,21 @@ export default function EditTeacher({
   currentEmail,
   currentPhone,
   id,
+  fetchTeachers
 }) {
   const [showPopup, setShowPopup] = useState(false);
-  const [name, setName] = useState("");
-  const [gradeLevel, setGradeLevel] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState(currentName);
+  const [gradeLevel, setGradeLevel] = useState(currentGrade);
+  const [phoneNumber, setPhoneNumber] = useState(currentPhone);
+  const [email, setEmail] = useState(currentEmail);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name.trim()) {
-      alert("Please fill in the name field.");
+    if (!name.trim() || !gradeLevel.trim()|| !phoneNumber.trim() || !email.trim()) {
+      alert("Please fill in all fields.");
       return;
     }
-    if (!gradeLevel.trim()) {
-      alert("Please fill in the grade field.");
-      return;
-    }
-    if (!phoneNumber.trim()) {
-      alert("Please fill in the phone number field.");
-      return;
-    }
-    if (!email.trim()) {
-      alert("Please fill in the email field.");
+    if (name == currentName && gradeLevel == currentGrade && phoneNumber == currentPhone && email == currentEmail) {
+      alert("Please edit at least one field. Neither field can be empty.");
       return;
     }
 
@@ -55,7 +48,16 @@ export default function EditTeacher({
 
   return (
     <>
-      <button className="icon-button" onClick={() => setShowPopup(true)}>
+      <button
+        className="icon-button"
+        onClick={() => {
+          setName(currentName);
+          setGradeLevel(currentGrade);
+          setPhoneNumber(currentPhone);
+          setEmail(currentEmail);
+          setShowPopup(true);
+        }}
+      >
         <FaPencilAlt />
       </button>
 
@@ -69,7 +71,7 @@ export default function EditTeacher({
                 <input
                   type="text"
                   className="input-field"
-                  defaultValue={currentName}
+                  value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
                 />
@@ -79,7 +81,7 @@ export default function EditTeacher({
                 <input
                   type="number"
                   className="input-field"
-                  defaultValue={currentGrade}
+                  value={gradeLevel}
                   onChange={(e) => setGradeLevel(e.target.value)}
                   required
                 />
@@ -89,7 +91,7 @@ export default function EditTeacher({
                 <input
                   type="text"
                   className="input-field"
-                  defaultValue={currentEmail}
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
@@ -99,7 +101,7 @@ export default function EditTeacher({
                 <input
                   type="number"
                   className="input-field"
-                  defaultValue={currentPhone}
+                  value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   required
                 />

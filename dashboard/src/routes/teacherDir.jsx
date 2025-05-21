@@ -47,10 +47,13 @@ export default function TeacherDirectory() {
       <div className="layout">
         <div className="content">
           <div className="main-footer">
-            <AddTeacherToTJ fetchTeachers={fetchTeachers} />
+            <div className="header-row">
+              <h1>Teacher Directory</h1>
+              <AddTeacherToTJ fetchTeachers={fetchTeachers} />
+            </div>
           </div>
           <div className="categories">
-            <div className="teacher-header">
+            <div className="teacher-entry">
               <p>Name</p>
               <p>Grade</p>
               <p>Phone Number</p>
@@ -73,7 +76,7 @@ export default function TeacherDirectory() {
                     currentEmail={teacher.email}
                     currentPhone={teacher.phone}
                     id={teacher.id}
-                    fetchStudents={fetchTeachers}
+                    fetchTeachers={fetchTeachers}
                   />
                   <button
                     className="icon-button"

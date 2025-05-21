@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./AddToTJ.css";
 import { db } from "../../firebase";
 import { collection, addDoc } from "firebase/firestore";
-
+import { IoIosAdd } from "react-icons/io";
 export default function AddStudentToTJ({fetchStudents}) {
   const [showPopup, setShowPopup] = useState(false);
   const [name, setName] = useState("");
@@ -35,7 +35,11 @@ export default function AddStudentToTJ({fetchStudents}) {
 
   return (
     <>
-      <button className="add-button" onClick={() => setShowPopup(true)}>Add Student</button>
+      <button className="add-button-icon" onClick={() => setShowPopup(true)}>
+        <IoIosAdd size={25} />
+        Add Student
+        
+        </button>
 
       {showPopup && (
         <div className="overlay">

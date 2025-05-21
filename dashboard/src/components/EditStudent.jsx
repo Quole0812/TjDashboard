@@ -3,18 +3,23 @@ import "./EditAtTJ.css";
 import { db } from "../../firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { FaPencilAlt } from "react-icons/fa";
-export default function EditStudent({ currentGrade, currentName, id , fetchStudents}) {
+export default function EditStudent({
+  currentGrade,
+  currentName,
+  id,
+  fetchStudents,
+}) {
   const [showPopup, setShowPopup] = useState(false);
-  const [name, setName] = useState("");
-  const [gradeLevel, setGradeLevel] = useState("");
+  const [name, setName] = useState(currentName);
+  const [gradeLevel, setGradeLevel] = useState(currentGrade);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name.trim()) {
-      alert("Please fill in the name field.");
+    if (!name.trim() || !gradeLevel.trim()) {
+      alert("Please fill in all fields.");
       return;
     }
-    if (!gradeLevel.trim()) {
-      alert("Please fill in the grade field.");
+    if (name == currentName && gradeLevel == currentGrade) {
+      alert("Please edit at least one field. Neither field can be empty.");
       return;
     }
 
@@ -35,7 +40,14 @@ export default function EditStudent({ currentGrade, currentName, id , fetchStude
 
   return (
     <>
-      <button className="icon-button" onClick={() => setShowPopup(true)}>
+      <button
+        className="icon-button"
+        onClick={() => {
+          setName(currentName);
+          setGradeLevel(currentGrade);
+          setShowPopup(true);
+        }}
+      >
         <FaPencilAlt />
       </button>
 
@@ -49,9 +61,8 @@ export default function EditStudent({ currentGrade, currentName, id , fetchStude
                 <input
                   type="text"
                   className="input-field"
-                  defaultValue={currentName}
+                  value={name}
                   onChange={(e) => setName(e.target.value)}
-                  required
                 />
               </div>
               <div className="info-row">
@@ -59,9 +70,8 @@ export default function EditStudent({ currentGrade, currentName, id , fetchStude
                 <input
                   type="number"
                   className="input-field"
-                  defaultValue={currentGrade}
+                  value={gradeLevel}
                   onChange={(e) => setGradeLevel(e.target.value)}
-                  required
                 />
               </div>
               <button type="submit" className="add-button">

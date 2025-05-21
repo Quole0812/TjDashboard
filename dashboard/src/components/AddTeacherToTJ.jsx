@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./AddToTJ.css";
 import { db } from "../../firebase";
-import { collection, addDoc, getDocs,  } from "firebase/firestore";
-
-export default function AddTeachertoTJ({fetchTeachers}) {
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { IoIosAdd } from "react-icons/io";
+export default function AddTeachertoTJ({ fetchTeachers }) {
   const [showPopup, setShowPopup] = useState(false);
   const [name, setName] = useState("");
   const [gradeLevel, setGradeLevel] = useState("");
@@ -11,8 +11,8 @@ export default function AddTeachertoTJ({fetchTeachers}) {
   const [email, setEmail] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    if(!name.trim()){
+    e.preventDefault();
+    if (!name.trim()) {
       alert("Please fill in the name field.");
       return;
     }
@@ -20,11 +20,11 @@ export default function AddTeachertoTJ({fetchTeachers}) {
       alert("Please fill in the grade field.");
       return;
     }
-    if(!phoneNumber.trim()) {
+    if (!phoneNumber.trim()) {
       alert("Please fill in the phone number field.");
       return;
     }
-    if(!email.trim()) {
+    if (!email.trim()) {
       alert("Please fill in the email field.");
       return;
     }
@@ -51,7 +51,10 @@ export default function AddTeachertoTJ({fetchTeachers}) {
 
   return (
     <>
-      <button className="add-button" onClick={() => setShowPopup(true)}>Add Teacher</button>
+      <button className="add-button-icon" onClick={() => setShowPopup(true)}>
+        <IoIosAdd size={25} />
+        Add Teacher
+      </button>
 
       {showPopup && (
         <div className="overlay">
@@ -102,7 +105,11 @@ export default function AddTeachertoTJ({fetchTeachers}) {
               <button type="submit" className="add-button">
                 Submit
               </button>
-              <button type="button" className="add-button" onClick={() => setShowPopup(false)}>
+              <button
+                type="button"
+                className="add-button"
+                onClick={() => setShowPopup(false)}
+              >
                 Close
               </button>
             </form>
