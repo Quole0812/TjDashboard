@@ -1,7 +1,7 @@
 html, body{
   margin: 0;
   padding: 0;
-  background-color: e4e4e4;
+  background-color: #e4e4e4;
 }
 .courses-container {
   display: flex;
@@ -125,7 +125,7 @@ html, body{
 
 /* Modal box styling */
 .modal-box {
-  background: grey;
+  background: white;
   padding: 30px;
   border-radius: 20px;
   text-align: center;
