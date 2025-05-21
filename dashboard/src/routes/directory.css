@@ -72,6 +72,29 @@
   .card-row {
     display: contents;
   }
+
+  .student-entry {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr auto; /* consistent across header & rows */
+    align-items: center;
+    padding: 12px;
+    gap: 10px;
+  }
+  
+  .student-header {
+    font-weight: bold;
+    font-size: 1.2rem;
+    
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  .header-cell {
+    margin: 0;
+    font-weight: 600;
+  }
   
   .student-button {
     background: none;
@@ -80,5 +103,32 @@
     font: inherit;
     color: #007aff;
     cursor: pointer;
+  }
+  /* .student-entry {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr auto;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+    gap: 10px;
+  } */
+  
+  .student-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  
+  .icon-button {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px;
+    transition: transform 0.2s;
+  }
+  
+  .icon-button:hover {
+    transform: scale(1.2);
   }
   
