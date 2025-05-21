@@ -1,15 +1,15 @@
 import Sidebar from '../components/Sidebar';
+import Calendar from '../components/Calendar';
 
-const Calendar = () => {
+const CalendarPage = () => {
   return (
     <div>
       <Sidebar />
       <main>
-        <h1>Event Calendar</h1>
-        {/* Add your calendar content here */}
+        <Calendar />
       </main>
     </div>
   );
 };
 
-export default Calendar;
+export default CalendarPage;
