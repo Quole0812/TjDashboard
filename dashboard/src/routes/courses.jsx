@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import { Link } from 'react-router-dom';
 import './courses.css';
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase.js"; 
 import { FaTrash } from 'react-icons/fa';
 
@@ -43,20 +43,20 @@ const Courses = () => {
     setNewCourse((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddCourse = async () => {
+  {/* const handleAddCourse = async () => {
   if (newCourse.name && newCourse.grade) {
     try {
       const docRef = await addDoc(collection(db, 'classes'), {
         name: newCourse.name,
         gradeLevel: newCourse.grade,
-        teacherId: 'placeholder-teacher-id'  // replace this with a real reference as needed
+        teacherID: 'placeholder-teacher-id'  // replace this with a real reference as needed
       });
 
       const newCourseEntry = {
         id: docRef.id,
         name: newCourse.name,
         gradeLevel: newCourse.grade,
-        teacherId: 'placeholder-teacher-id'
+        teacherID: 'placeholder-teacher-id'
       };
 
       setCourses(prev => [...prev, newCourseEntry]);
@@ -67,6 +67,34 @@ const Courses = () => {
     }
   }
 };
+*/}
+
+const handleAddCourse = async () => {
+  if (newCourse.name && newCourse.grade) {
+    try {
+      const docRef = await addDoc(collection(db, 'classes'), {
+        name: newCourse.name,
+        gradeLevel: newCourse.grade,
+        teacherID: 'placeholder-teacher-id'
+      });
+
+      // fetch updated course list from Firestore
+      const querySnapshot = await getDocs(collection(db, 'classes'));
+      const courseList = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setCourses(courseList);
+
+      // clear form and close modal
+      setNewCourse({ name: '', grade: '' });
+      setModalOpen(false);
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
+  }
+};
+
 
 const handleDeleteCourse = async (courseId) => {
   try {
