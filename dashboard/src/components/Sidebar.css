@@ -1,31 +1,37 @@
 .sidebar {
-  background-color: #2E2E3A;
-  width: 250px;
+  background: linear-gradient(180deg, #2E2E3A 0%, #1E1E2A 100%);
+  width: 280px;
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
   padding: 2rem 0;
   color: white;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logo-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
-  padding: 0 1rem;
+  margin-bottom: 3rem;
+  padding: 0 1.5rem;
 }
 
 .sidebar-logo {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  padding: 3px;
 }
 
 .sidebar-logo:hover {
   transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-nav ul {
@@ -35,24 +41,41 @@
 }
 
 .sidebar-nav li {
-  padding: 0.5rem 0;
+  padding: 0.5rem 1.5rem;
 }
 
 .sidebar-nav a {
-  color: white;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  padding: 0.75rem 2rem;
-  display: block;
-  transition: background-color 0.3s ease;
-  font-size: 1.1rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  border-radius: 8px;
+  font-weight: 500;
 }
 
 .sidebar-nav a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(5px);
+}
+
+.sidebar-nav a.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.sidebar-nav svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0.8;
 }
 
 /* Add some spacing to the main content to account for the fixed sidebar */
 main {
-  margin-left: 250px;
+  margin-left: 280px;
   padding: 2rem;
 } 
