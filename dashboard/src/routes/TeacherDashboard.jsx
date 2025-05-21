@@ -4,14 +4,21 @@ import fetchStudents, { fetchTeachers, updateClassTeachers, updateClassStudents 
 import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTimes, FaPlus, FaSearch } from 'react-icons/fa';
 import { FaDeleteLeft } from 'react-icons/fa6'
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
-import { Link } from 'react-router-dom';
 
 const TeacherDashboard = () => {
+  const { currentUser } = useAuth();
   const { id } = useParams();
+  
+  // Redirect if not authenticated
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
+
   const [students, setStudents] = useState([]);
   const [instructors, setInstructors] = useState([]);
   const [classTeachers, setClassTeachers] = useState([]);
