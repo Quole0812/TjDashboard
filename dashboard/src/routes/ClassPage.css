@@ -2,11 +2,23 @@
   text-align: center;
   font-size: 2rem;
   margin-top: 2rem;
+  
 }
 
 main {
-  margin-left: 250px; /* Matches sidebar width */
+  margin-left: 350px; /* Matches sidebar width */
+  margin-right: 100px;
   padding: 2rem;
+}
+
+.dashboard-button {
+  /* flex: 1; */
+  background-color: #FFFFFF;
+  padding: 1.5% 4%;
+  border-radius: 30px;
+  overflow: hidden;
+  font-size:1rem;
+  font-weight: bold;
 }
 
 .classpage-header {
@@ -24,29 +36,71 @@ main {
 
 .stat-card {
   flex: 1;
-  background-color: #eee;
-  /* padding: 1rem; */
+  background-color: #FFFFFF;
+  padding: 1rem;
   text-align: center;
 }
 
 .stat-value {
-    font-size: 3.5rem;
+    font-size: 5rem;
+    margin: 8%;
 }
 
 .roster-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
+  table-layout: fixed;
+  font-weight:bold;
 }
 
 .roster-table th,
 .roster-table td {
   padding: 0.75rem;
-  border-bottom: 1px solid #ccc;
-  background-color: #eee;
-  text-align: left;
+  /* border-bottom: 1px solid #ccc; */
+  background-color: #FFFFFF;
+  /* text-align: left; */
+  /* font-family: 'Courier New', Courier; */
+  font-size: large;
+  padding: 1.5% 5%;
 }
 
 .grade {
   font-weight: bold;
+}
+
+.rcorners {
+  border-radius: 40px;
+}
+
+.table-wrapper {
+  overflow: hidden;
+  border-radius: 30px;
+  margin-top: 1rem;
+}
+
+.page-layout { 
+  background-color: #e4e4e4;
+  min-height: 100vh;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+.h2, .h3 {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.align-right {
+  text-align: right;
 }
