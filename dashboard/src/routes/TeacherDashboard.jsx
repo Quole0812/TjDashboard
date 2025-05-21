@@ -1,9 +1,12 @@
 import './TeacherDash.css';
-import { FaEdit, FaTimes, FaPlus, FaSearch } from 'react-icons/fa';
 import fetchStudents, { fetchTeachers, updateClassTeachers, updateClassStudents } from "../utils/students";
+
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { doc, getDoc } from "firebase/firestore";
+import { FaEdit, FaTimes, FaPlus, FaSearch } from 'react-icons/fa';
+import { FaDeleteLeft } from 'react-icons/fa6'
+import { useParams, Link } from 'react-router-dom';
+
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 const TeacherDashboard = () => {
@@ -12,13 +15,19 @@ const TeacherDashboard = () => {
   const [instructors, setInstructors] = useState([]);
   const [classTeachers, setClassTeachers] = useState([]);
   const [classStudents, setClassStudents] = useState([]);
-  const [showStudentModal, setShowStudentModal] = useState(false);
-  const [showTeacherModal, setShowTeacherModal] = useState(false);
-  const [error, setError] = useState('');
+
   const [classData, setClassData] = useState(null);
   const [gradesData, setGradesData] = useState([]);
+
+  const [error, setError] = useState('');
+
+  const [showStudentModal, setShowStudentModal] = useState(false);
+  const [showTeacherModal, setShowTeacherModal] = useState(false);
+  const [showEditStudentModal, setShowEditStudentModal] = useState(false);
+  const [showEditTeacherModal, setShowEditTeacherModal] = useState(false);
+  const [editingStudent, setEditingStudent] = useState(null);
+  const [editingTeacher, setEditingTeacher] = useState(null);
   
-  // search and selection
   const [studentSearch, setStudentSearch] = useState('');
   const [teacherSearch, setTeacherSearch] = useState('');
   const [selectedStudents, setSelectedStudents] = useState([]);
@@ -87,6 +96,7 @@ const TeacherDashboard = () => {
   const avgGPA = calculateAverageGrade(letterGrades);
   const avgLetter = gpaToLetter(avgGPA);  
 
+  // selecting students/ teachers for add func
   const filteredStudents = students.filter(student => 
     student.name.toLowerCase().includes(studentSearch.toLowerCase()) ||
     student.id.toLowerCase().includes(studentSearch.toLowerCase())
@@ -153,11 +163,152 @@ const TeacherDashboard = () => {
     }
   };
 
+  // editing student/ teacher info
+  const handleEditStudent = (student) => {
+    setEditingStudent(student);
+    setShowEditStudentModal(true);
+  };
+
+  const handleEditTeacher = (teacher) => {
+    setEditingTeacher(teacher);
+    setShowEditTeacherModal(true);
+  };
+
+  const handleUpdateStudent = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      const studentRef = doc(db, "students", editingStudent.id);
+      await updateDoc(studentRef, {
+        name: editingStudent.name,
+        id: editingStudent.id,
+        grade: editingStudent.grade
+      });
+      
+      setStudents(students.map(s => 
+        s.id === editingStudent.id ? editingStudent : s
+      ));
+      
+      setShowEditStudentModal(false);
+      setEditingStudent(null);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleUpdateTeacher = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      const teacherRef = doc(db, "teachers", editingTeacher.id);
+      await updateDoc(teacherRef, {
+        name: editingTeacher.name,
+        email: editingTeacher.email,
+        phone: editingTeacher.phone
+      });
+      
+      setInstructors(instructors.map(t => 
+        t.id === editingTeacher.id ? editingTeacher : t
+      ));
+      
+      setShowEditTeacherModal(false);
+      setEditingTeacher(null);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const dashboardTeachers = instructors.filter(t => classTeachers.includes(t.id));
   const dashboardStudents = students.filter(s => classStudents.includes(s.id));
 
   return (
     <main className="main-content">
+      {/* Edit Student Modal */}
+      {showEditStudentModal && editingStudent && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Edit Student</h3>
+            <form onSubmit={handleUpdateStudent}>
+              <div className="form-group">
+                <label>Name:</label>
+                <input
+                  type="text"
+                  value={editingStudent.name}
+                  onChange={(e) => setEditingStudent({...editingStudent, name: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>ID:</label>
+                <input
+                  type="text"
+                  value={editingStudent.id}
+                  onChange={(e) => setEditingStudent({...editingStudent, id: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Grade:</label>
+                <input
+                  type="text"
+                  value={editingStudent.grade}
+                  onChange={(e) => setEditingStudent({...editingStudent, grade: e.target.value})}
+                  required
+                />
+              </div>
+              {error && <div className="form-error">{error}</div>}
+              <div className="modal-actions">
+                <button type="button" onClick={() => setShowEditStudentModal(false)}>Cancel</button>
+                <button type="submit">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Teacher Modal */}
+      {showEditTeacherModal && editingTeacher && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Edit Teacher</h3>
+            <form onSubmit={handleUpdateTeacher}>
+              <div className="form-group">
+                <label>Name:</label>
+                <input
+                  type="text"
+                  value={editingTeacher.name}
+                  onChange={(e) => setEditingTeacher({...editingTeacher, name: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Email:</label>
+                <input
+                  type="email"
+                  value={editingTeacher.email}
+                  onChange={(e) => setEditingTeacher({...editingTeacher, email: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Phone:</label>
+                <input
+                  type="tel"
+                  value={editingTeacher.phone}
+                  onChange={(e) => setEditingTeacher({...editingTeacher, phone: e.target.value})}
+                  required
+                />
+              </div>
+              {error && <div className="form-error">{error}</div>}
+              <div className="modal-actions">
+                <button type="button" onClick={() => setShowEditTeacherModal(false)}>Cancel</button>
+                <button type="submit">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Add Teacher Modal */}
       {showTeacherModal && (
         <div className="modal-overlay">
@@ -253,8 +404,10 @@ const TeacherDashboard = () => {
       {/* header */}
       <div className="dashboard-header">
         <h1 className="dashboard-title">{classData ? `${classData.name} Dashboard` : "Loading..."}</h1>
-        <button className="dashboard-btn">Teacher Dashboard</button>
-      </div>
+          <Link to={`/courses/${id}`}>
+            <button className="class-btn">Class Page</button>
+          </Link>      
+        </div>
       <hr className="dashboard-divider" />
 
       {/* stat cards */}
@@ -285,17 +438,20 @@ const TeacherDashboard = () => {
               <th>Instructor Name</th>
               <th>Email</th>
               <th>Phone Number</th>
+              <th><FaEdit className="edit-icon" /></th>
             </tr>
           </thead>
           <tbody>
             <tr className="table-gap-row">
-              <td colSpan={3}></td>
+              <td colSpan={5}></td>
             </tr>
             {dashboardTeachers.map((inst, idx) => (
               <tr key={inst.id || idx}>
                 <td>{inst.name}</td>
                 <td>{inst.email}</td>
                 <td>{inst.phone}</td>
+                <td><FaEdit className="edit-icon" onClick={() => handleEditTeacher(inst)} /></td>
+                <td><FaDeleteLeft className="delete-icon" /></td>
               </tr>
             ))}
           </tbody>
@@ -314,17 +470,20 @@ const TeacherDashboard = () => {
               <th>Student Name</th>
               <th>ID</th>
               <th>Grade</th>
+              <td><FaEdit className="edit-icon" /></td> 
             </tr>
           </thead>
           <tbody>
             <tr className="table-gap-row">
-              <td colSpan={3}></td>
+              <td colSpan={5}></td>
             </tr>
             {dashboardStudents.map((student, idx) => (
               <tr key={student.id || idx}>
                 <td>{student.name}</td>
                 <td>{student.id}</td>
                 <td>{student.grade}</td>
+                <td><FaEdit className="edit-icon" onClick={() => handleEditStudent(student)} /></td>
+                <td><FaDeleteLeft className="delete-icon" /></td>
               </tr>
             ))}
           </tbody>
