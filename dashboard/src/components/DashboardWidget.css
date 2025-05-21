@@ -7,9 +7,10 @@
     background: #1A1A18;
     color: #fff;
     min-width: 300px;
-    min-height: 150px;
+    min-height: 250px;
     display: flex;
     flex-direction: column;
+    border: 1px solid #fff;
     box-shadow: 0 4px 16px rgba(0,0,0,0.2);
     transition: transform 0.2s;
   }
