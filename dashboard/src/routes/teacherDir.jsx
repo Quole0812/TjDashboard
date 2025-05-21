@@ -53,17 +53,17 @@ export default function TeacherDirectory() {
             </div>
           </div>
           <div className="categories">
-            <div className="teacher-entry">
-              <p>Name</p>
-              <p>Grade</p>
-              <p>Phone Number</p>
-              <p>Email</p>
-              <p>Actions</p>
+            <div className="teacher-header">
+              <p className="header-cell">Name</p>
+              <p className="header-cell">Grade</p>
+              <p className="header-cell">Phone Number</p>
+              <p className="header-cell">Email</p>
+              <p className="header-cell">Actions</p>
             </div>
           </div>
 
           <div className="scroll-container">
-            {teachers.map((teacher, i) => (
+            {!noTeachers && teachers.map((teacher, i) => (
               <div key={i} className="teacher-entry">
                 <p>{teacher.name}</p>
                 <p>{teacher.grade}</p>
@@ -87,6 +87,11 @@ export default function TeacherDirectory() {
                 </div>
               </div>
             ))}
+            {noTeachers && (
+              <div className="no-students">
+                <h2>No teachers found.</h2>
+              </div>
+            )}
           </div>
         </div>
       </div>
