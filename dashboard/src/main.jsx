@@ -10,6 +10,7 @@ import TeacherDirectory from './routes/teacherDir'
 import StudentDirectory from './routes/studentDir'
 import Courses from './routes/courses'
 import ClassPage from './routes/ClassPage'
+import TeacherDashboardPage from './routes/teacherDash'
 
 const router = createBrowserRouter([
   {
@@ -35,7 +36,11 @@ const router = createBrowserRouter([
   {
     path: '/courses/:id',
     element: <ClassPage />,
-    }
+  },
+  {
+    path: '/teacherDash/:id',
+    element: <TeacherDashboardPage />
+  }
 ])
 
 createRoot(document.getElementById('root')).render(
