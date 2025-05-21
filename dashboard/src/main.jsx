@@ -38,7 +38,7 @@ const router = createBrowserRouter([
     element: <ClassPage />,
   },
   {
-    path: '/teacherDash',
+    path: '/teacherDash/:id',
     element: <TeacherDashboardPage />
   }
 ])
