@@ -18,7 +18,7 @@ const TeacherDashboard = () => {
   const [classData, setClassData] = useState(null);
   const [gradesData, setGradesData] = useState([]);
   
-  // New state for search and selection
+  // search and selection
   const [studentSearch, setStudentSearch] = useState('');
   const [teacherSearch, setTeacherSearch] = useState('');
   const [selectedStudents, setSelectedStudents] = useState([]);
@@ -54,7 +54,7 @@ const TeacherDashboard = () => {
     fetchData();
   }, [id]);
 
-  // grade average
+  // calculate grade average
   function calculateAverageGrade(gradesArray) {
     if (!gradesArray.length) return "N/A";
 
@@ -87,7 +87,6 @@ const TeacherDashboard = () => {
   const avgGPA = calculateAverageGrade(letterGrades);
   const avgLetter = gpaToLetter(avgGPA);  
 
-  // Filter functions for search
   const filteredStudents = students.filter(student => 
     student.name.toLowerCase().includes(studentSearch.toLowerCase()) ||
     student.id.toLowerCase().includes(studentSearch.toLowerCase())
@@ -98,7 +97,6 @@ const TeacherDashboard = () => {
     teacher.email.toLowerCase().includes(teacherSearch.toLowerCase())
   );
 
-  // Handle multi-select
   const handleStudentSelect = (studentId) => {
     setSelectedStudents(prev => 
       prev.includes(studentId)
@@ -115,7 +113,6 @@ const TeacherDashboard = () => {
     );
   };
 
-  // Handle bulk add
   const handleBulkAddStudents = async () => {
     setError('');
     try {
@@ -144,7 +141,6 @@ const TeacherDashboard = () => {
     }
   };
 
-  // Reset selections when modal closes
   const handleCloseModal = (modalType) => {
     if (modalType === 'student') {
       setShowStudentModal(false);
@@ -157,7 +153,6 @@ const TeacherDashboard = () => {
     }
   };
 
-  // filtered lists for dashboard display
   const dashboardTeachers = instructors.filter(t => classTeachers.includes(t.id));
   const dashboardStudents = students.filter(s => classStudents.includes(s.id));
 
