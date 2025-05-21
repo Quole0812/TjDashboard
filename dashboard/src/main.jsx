@@ -14,6 +14,7 @@ import Courses from './routes/courses'
 import ClassPage from './routes/ClassPage'
 import Login from './routes/login'
 import SignUp from './routes/signUp'
+import TeacherDashboardPage from './routes/teacherDash'
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <SignUp />,
+  },
+  {
+    path: '/teacherDash/:id',
+    element: <PrivateRoute><TeacherDashboardPage /></PrivateRoute>
   }
 ])
 

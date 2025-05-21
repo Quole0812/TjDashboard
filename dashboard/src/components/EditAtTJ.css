@@ -1,0 +1,75 @@
+/* Fullscreen dark background overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure it's on top of all other content */
+  }
+  
+  /* Centered popup box */
+  .popup {
+    position: relative;
+    z-index: 10000;
+    background: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    color: black;
+    text-align: left;
+    min-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .popup h2 {
+    margin-top: 0;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .label {
+    color: gray;
+    font-size: 18px;
+  }
+  
+  .value {
+    font-size: 18px;
+    color: black;
+    font-weight: 500;
+  }
+  
+  .add-button {
+    display: inline-block;
+    margin-top: 20px;
+    margin-right: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 2px solid gray;
+    border-radius: 30px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .add-button:hover {
+    background-color: #f0f0f0;
+  }
+  .icon-button {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px;
+    transition: transform 0.2s;
+  }
