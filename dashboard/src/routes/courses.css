@@ -1,7 +1,7 @@
 html, body{
   margin: 0;
   padding: 0;
-  background-color: #e4e4e4;
+  background-color: e4e4e4;
 }
 .courses-container {
   display: flex;
@@ -10,7 +10,6 @@ html, body{
 }
 
 .courses-grid {
-  background-color: #e4e4e4;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -42,7 +41,6 @@ html, body{
 }
 
 .courses-wrapper {
-  background-color: white;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -127,7 +125,7 @@ html, body{
 
 /* Modal box styling */
 .modal-box {
-  background: white;
+  background: grey;
   padding: 30px;
   border-radius: 20px;
   text-align: center;
