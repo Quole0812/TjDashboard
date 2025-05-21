@@ -1,0 +1,134 @@
+/* Student.css */
+
+/* parent flex container: sidebar + page content */
+.layout {
+    display: flex;
+    height: 100vh;        /* or whatever fits your layout */
+  }
+  
+  /* wrap everything to the right of the sidebar */
+  .content {
+    flex: 1;              /* fill remaining width */
+    display: flex;
+    flex-direction: column;
+  }
+  .categories {
+    margin-left: 250px;
+    width: 80vw; /* Or set a max-width if needed */
+    background: white;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 1rem;
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 0.75rem 1rem;
+  }
+  /* floating button inside content (still fixed in content flow) */
+  .main-footer {
+    align-self: flex-end; /* push to the right */
+    margin-left: 40vw;
+    margin-right: 2vw;
+    background: white;
+    margin-bottom:1vh;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* your scroll‐area: equal gutters on left & right */
+  .scroll-container {
+
+    flex: 1;               /* fill remaining vertical space */
+   margin: 1rem 40px;    
+    overflow-y: auto;
+    margin-top: 1vh;
+    padding: 2rem;
+    margin-left: 250px;
+    height: 90vh;
+    width: 80vw;
+    box-sizing: border-box;
+    background: white;
+    border: 2px solid black;
+    border-radius: 8px;
+  }
+  .scroll-container::-webkit-scrollbar {
+  display: none;               /* Chrome, Safari, Opera */
+}
+  
+  /* grid for each student row */
+  .student-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    color: #000;
+    border: none;
+    box-shadow: none;
+  }
+  
+  /* flatten wrappers */
+  .card-row {
+    display: contents;
+  }
+
+  .student-entry {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr auto; /* consistent across header & rows */
+    align-items: center;
+    padding: 12px;
+    gap: 10px;
+  }
+  
+  .student-header {
+    font-weight: bold;
+    font-size: 1.2rem;
+    
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  .header-cell {
+    margin: 0;
+    font-weight: 600;
+  }
+  
+  .student-button {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: #007aff;
+    cursor: pointer;
+  }
+  /* .student-entry {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr auto;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+    gap: 10px;
+  } */
+  
+  .student-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  
+  .icon-button {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px;
+    transition: transform 0.2s;
+  }
+  
+  .icon-button:hover {
+    transform: scale(1.2);
+  }
+  
