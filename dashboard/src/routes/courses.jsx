@@ -152,7 +152,7 @@ const handleDeleteCourse = async (courseId) => {
       </main>
 
 
-      {/* Course Addition */}
+      {/* Course Addition 
       {modalOpen && (
         <div className="modal-overlay">
           <div className="modal-box">
@@ -181,6 +181,42 @@ const handleDeleteCourse = async (courseId) => {
           </div>
         </div>
       )}
+        */}
+      {modalOpen && (
+  <div
+    className="modal-overlay"
+    onClick={() => setModalOpen(false)} // ✅ click outside closes modal
+  >
+    <div
+      className="modal-box"
+      onClick={(e) => e.stopPropagation()} // ✅ prevent click inside from closing
+    >
+      <h2>Add Course</h2>
+      <div className="modal-field">
+        <label>Class Name:</label>
+        <input
+          type="text"
+          name="name"
+          value={newCourse.name}
+          onChange={handleFormChange}
+        />
+      </div>
+      <div className="modal-field">
+        <label>Grade Level:</label>
+        <input
+          type="text"
+          name="grade"
+          value={newCourse.grade}
+          onChange={handleFormChange}
+        />
+      </div>
+      <button className="add-course-modal-btn" onClick={handleAddCourse}>
+        + Add Course
+      </button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
