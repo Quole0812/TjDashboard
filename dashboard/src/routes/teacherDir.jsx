@@ -58,6 +58,7 @@ export default function TeacherDirectory() {
   }, []);
   return (
     <>
+     <div className="page-wrapper">
       <Sidebar />
       <div className="layout">
         <div className="content">
@@ -115,6 +116,7 @@ export default function TeacherDirectory() {
             )}
           </div>
         </div>
+      </div>
       </div>
     </>
   );
