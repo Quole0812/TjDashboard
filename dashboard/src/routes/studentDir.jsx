@@ -83,18 +83,24 @@ export default function StudentDirectory() {
                   <p>{student.grade}</p>
 
                   <div className="student-actions">
-                    <EditStudent
-                      currentName={student.name}
-                      currentGrade={student.grade}
-                      id={student.id}
-                      fetchStudents={fetchStudents}
-                    />
-                    <button
-                      className="icon-button"
-                      onClick={() => deleteStudent(student.id)}
-                    >
-                      <VscError />
-                    </button>
+                    <div className="tooltip">
+                      <EditStudent
+                        currentName={student.name}
+                        currentGrade={student.grade}
+                        id={student.id}
+                        fetchStudents={fetchStudents}
+                      />
+                      <span className="tooltiptext">Edit Student</span>
+                    </div>
+                    <div className="tooltip">
+                      <button
+                        className="icon-button"
+                        onClick={() => deleteStudent(student.id)}
+                      >
+                        <VscError />
+                      </button>
+                      <span className="tooltiptext">Delete Student</span>
+                    </div>
                   </div>
                 </div>
               ))}
