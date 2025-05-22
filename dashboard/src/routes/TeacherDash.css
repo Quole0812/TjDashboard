@@ -70,6 +70,27 @@
   font-size: 1.1rem;
   margin-top: 0.5rem;
   line-height: 1.5;
+  max-height: 200px;
+  overflow-y: scroll;
+  padding-right: 10px;
+}
+
+.teacher-contact {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.teacher-contact strong {
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.contact-divider {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 0.5rem 0;
 }
 
 .section {

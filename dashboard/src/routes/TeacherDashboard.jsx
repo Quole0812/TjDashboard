@@ -466,7 +466,20 @@ const TeacherDashboard = () => {
         </div>
         <div className="stat-card">
           <div className="stat-title">Contact Information</div>
-          <div className="stat-contact">s.johnson@gmail.com<br/>(111) 111-1111</div>
+          <div className="stat-contact">
+            {dashboardTeachers.length > 0 ? (
+              dashboardTeachers.map((teacher, index) => (
+                <div key={teacher.id} className="teacher-contact">
+                  <strong>{teacher.name}</strong><br/>
+                  {teacher.email}<br/>
+                  {teacher.phone}
+                  {index < dashboardTeachers.length - 1 && <hr className="contact-divider" />}
+                </div>
+              ))
+            ) : (
+              <div>No instructors assigned</div>
+            )}
+          </div>
         </div>
       </div>
 
