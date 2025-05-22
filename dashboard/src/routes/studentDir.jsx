@@ -11,10 +11,8 @@ import EditStudent from "../components/EditStudent";
 import { db } from "../../firebase";
 import {
   collection,
-  addDoc,
   getDocs,
   deleteDoc,
-  updateDoc,
   doc,
 } from "firebase/firestore";
 
@@ -85,7 +83,7 @@ export default function StudentDirectory() {
                       <div className="tooltip">
                         <EditStudent
                           currentName={student.name}
-                          currentGrade={student.grade}
+                          currentGrade={student.gradeLevel}
                           id={student.id}
                           fetchStudents={fetchStudents}
                         />

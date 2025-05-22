@@ -26,7 +26,7 @@ export default function EditStudent({
     try {
       await updateDoc(doc(db, "students", id), {
         name: name.trim(),
-        grade: gradeLevel.trim(),
+        gradeLevel: gradeLevel.trim(),
       });
       console.log("Student saved:", { name, gradeLevel });
     } catch (error) {
