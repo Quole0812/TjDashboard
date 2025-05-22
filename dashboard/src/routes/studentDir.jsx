@@ -17,6 +17,10 @@ import {
   deleteDoc,
   updateDoc,
   doc,
+  DocumentReference,
+  arrayRemove,
+  query,
+  where,
 } from "firebase/firestore";
 
 export default function StudentDirectory() {
@@ -29,11 +33,28 @@ export default function StudentDirectory() {
       await deleteDoc(doc(db, "students", id));
 
       //now we delete any grade record for that student if exist 
+      console.log("ok let's see if we need to delete any grade");
       const gradeQuery = query(collection(db, 'grades'), where ("studentId", "==", id));
       const gradeSnap = await getDocs(gradeQuery);
-      gradeSnap.forEach
+      gradeSnap.forEach(async (docRef) => {
+        await deleteDoc(doc(db, "grades", docRef.id));
+      });
 
 
+      //now remove student ID from all class roster
+      const classSnapshot = await getDocs(collection(db, "classes"));
+      classSnapshot.forEach(async (classDoc) => {
+        const data = classDoc.data();
+        console.log("ok lets see if any of these student actually exist")
+        if (data.studentIDs && data.studentIDs.includes(id)) {
+          console.log("omg we found a student lez delete them kekeke");
+          await updateDoc(doc(db, "classes", classDoc.id), {
+            studentIDs: arrayRemove(id),
+          });
+        }
+      })
+
+      //refresh list 
       fetchStudents();
     } catch (error) {
       console.error("Error deleting student: ", error);
