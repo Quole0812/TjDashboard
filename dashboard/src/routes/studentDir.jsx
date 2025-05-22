@@ -80,8 +80,7 @@ export default function StudentDirectory() {
                   <div key={i} className="student-card student-entry">
                     <p>{student.name}</p>
                     <p>{student.id}</p>
-                    <p>{student.grade}</p>
-
+                    <p>{student.gradeLevel}</p>
                     <div className="student-actions">
                       <div className="tooltip">
                         <EditStudent

@@ -24,7 +24,6 @@ export default function AddStudentToTJ({fetchStudents}) {
       await addDoc(collection(db, "students"), {
         name: name.trim(),
         gradeLevel: gradeLevel.trim(),
-
       });
       console.log("Student saved:", { name, gradeLevel });
     } catch (error) {

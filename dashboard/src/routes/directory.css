@@ -74,6 +74,7 @@
   grid-template-columns: 2fr 2fr 2fr 1fr auto;
   align-items: center; /* vertical centering */ /* equal top/bottom padding */ /* match on both */
   gap: 2px;
+  color: black;
   box-sizing: border-box;
   line-height: 1.4; /* consistent spacing */
 }
