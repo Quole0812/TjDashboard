@@ -59,8 +59,9 @@ const TeacherDashboard = () => {
         if (classSnap.exists()) {
           const classDoc = classSnap.data();
           setClassData(classDoc);
-          setClassTeachers(classDoc.teacherIDs || []);
-          setClassStudents(classDoc.studentIDs || []);
+
+          setClassTeachers(classDoc.teacherIDs?.map(ref => ref.id) || []);
+          setClassStudents(classDoc.studentIDs?.map(ref => ref.id) || []);
         } else {
           console.warn("No such class document.");
         }
@@ -232,9 +233,10 @@ const TeacherDashboard = () => {
     try {
       // delete student from class
       const classRef = doc(db, "classes", id);
+      const studentRef = doc(db, "students", studentId);
       const updatedStudentIds = classStudents.filter(id => id !== studentId);
       await updateDoc(classRef, {
-        studentIDs: updatedStudentIds
+        studentIDs: updatedStudentIds.map(id => doc(db, "students", id))
       });
       
       // update state
@@ -250,9 +252,10 @@ const TeacherDashboard = () => {
     try {
       // delete teacher from class
       const classRef = doc(db, "classes", id);
+      const teacherRef = doc(db, "teachers", teacherId);
       const updatedTeacherIds = classTeachers.filter(id => id !== teacherId);
       await updateDoc(classRef, {
-        teacherIDs: updatedTeacherIds
+        teacherIDs: updatedTeacherIds.map(id => doc(db, "teachers", id))
       });
       
       // update state
@@ -466,7 +469,20 @@ const TeacherDashboard = () => {
         </div>
         <div className="stat-card">
           <div className="stat-title">Contact Information</div>
-          <div className="stat-contact">s.johnson@gmail.com<br/>(111) 111-1111</div>
+          <div className="stat-contact">
+            {dashboardTeachers.length > 0 ? (
+              dashboardTeachers.map((teacher, index) => (
+                <div key={teacher.id} className="teacher-contact">
+                  <strong>{teacher.name}</strong><br/>
+                  {teacher.email}<br/>
+                  {teacher.phone}
+                  {index < dashboardTeachers.length - 1 && <hr className="contact-divider" />}
+                </div>
+              ))
+            ) : (
+              <div>No instructors assigned</div>
+            )}
+          </div>
         </div>
       </div>
 

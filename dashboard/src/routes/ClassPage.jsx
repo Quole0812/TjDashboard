@@ -195,6 +195,7 @@ export default function ClassPage() {
                 <tbody>
                   {studentData.map((student) => {
                     const gradeEntry = gradesData.find(
+                 
                       (g) => g.studentIDs.id === student.id // match student by ID
                     );
 

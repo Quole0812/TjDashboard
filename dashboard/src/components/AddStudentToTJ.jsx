@@ -3,10 +3,13 @@ import "./AddToTJ.css";
 import { db } from "../../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { IoIosAdd } from "react-icons/io";
+
 export default function AddStudentToTJ({fetchStudents}) {
   const [showPopup, setShowPopup] = useState(false);
   const [name, setName] = useState("");
   const [gradeLevel, setGradeLevel] = useState("");
+  const [academicGrade, setAcademicGrade] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault(); 
     if(!name.trim()){
@@ -14,64 +17,79 @@ export default function AddStudentToTJ({fetchStudents}) {
       return;
     }
     if (!gradeLevel.trim()) {
-      alert("Please fill in the grade field.");
+      alert("Please fill in the grade level field.");
+      return;
+    }
+    if (!academicGrade.trim()) {
+      alert("Please fill in the academic grade field.");
       return;
     }
 
     try {
       await addDoc(collection(db, "students"), {
         name: name.trim(),
-        grade: gradeLevel.trim(),
+        gradeLevel: gradeLevel.trim(),
+        academicGrade: academicGrade.trim(),
       });
-      console.log("Student saved:", { name, gradeLevel });
+      console.log("Student saved:", { name, gradeLevel, academicGrade });
     } catch (error) {
       console.error("Error adding document: ", error);
     }
     setShowPopup(false);
     setName("");
     setGradeLevel("");
+    setAcademicGrade("");
     fetchStudents();
   };
 
   return (
     <>
-      <button className="add-button-icon" onClick={() => setShowPopup(true)}>
-        <IoIosAdd size={25} />
+      <button className="add-button" onClick={() => setShowPopup(true)}>
+        <IoIosAdd className="add-icon" />
         Add Student
-        
-        </button>
+      </button>
 
       {showPopup && (
-        <div className="overlay">
+        <div className="popup-overlay">
           <div className="popup">
-            <h2>Add Student to Thomas Jefferson Elementary</h2>
+            <h2>Add New Student</h2>
             <form onSubmit={handleSubmit}>
-              <div className="info-row">
-                <label className="label">Name:</label>
+              <div className="form-group">
+                <label htmlFor="name">Name:</label>
                 <input
                   type="text"
-                  className="input-field"
+                  id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  required
+                  placeholder="Enter student name"
                 />
               </div>
-              <div className="info-row">
-                <label className="label">Grade Level:</label>
+              <div className="form-group">
+                <label htmlFor="gradeLevel">Grade Level:</label>
                 <input
-                  type="number"
-                  className="input-field"
+                  type="text"
+                  id="gradeLevel"
                   value={gradeLevel}
                   onChange={(e) => setGradeLevel(e.target.value)}
-                  required
+                  placeholder="Enter grade level (e.g., 9, 10, 11, 12)"
                 />
               </div>
-              <button type="submit" className="add-button">
-                Submit
-              </button>
-              <button type="button" className="add-button" onClick={() => setShowPopup(false)}>
-                Close
-              </button>
+              <div className="form-group">
+                <label htmlFor="academicGrade">Academic Grade:</label>
+                <input
+                  type="text"
+                  id="academicGrade"
+                  value={academicGrade}
+                  onChange={(e) => setAcademicGrade(e.target.value)}
+                  placeholder="Enter academic grade (e.g., A+, B-, C)"
+                />
+              </div>
+              <div className="button-group">
+                <button type="submit">Add</button>
+                <button type="button" onClick={() => setShowPopup(false)}>
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
         </div>

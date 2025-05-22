@@ -42,15 +42,17 @@ export const addTeacher = async ({ name, email, phone }) => {
 
 export const updateClassTeachers = async (classId, teacherId) => {
     const classRef = doc(db, "classes", classId);
+    const teacherRef = doc(db, "teachers", teacherId);
     return await updateDoc(classRef, {
-        teacherIDs: arrayUnion(teacherId)
+        teacherIDs: arrayUnion(teacherRef)
     });
 };
 
 export const updateClassStudents = async (classId, studentId) => {
     const classRef = doc(db, "classes", classId);
+    const studentRef = doc(db, "students", studentId);
     return await updateDoc(classRef, {
-        studentIDs: arrayUnion(studentId)
+        studentIDs: arrayUnion(studentRef)
     });
 };
 
