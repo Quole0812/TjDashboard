@@ -25,7 +25,15 @@ export default function StudentDirectory() {
 
   const deleteStudent = async (id) => {
     try {
+      //ok dis delete the student object
       await deleteDoc(doc(db, "students", id));
+
+      //now we delete any grade record for that student if exist 
+      const gradeQuery = query(collection(db, 'grades'), where ("studentId", "==", id));
+      const gradeSnap = await getDocs(gradeQuery);
+      gradeSnap.forEach
+
+
       fetchStudents();
     } catch (error) {
       console.error("Error deleting student: ", error);
