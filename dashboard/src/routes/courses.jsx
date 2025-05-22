@@ -43,7 +43,7 @@ const handleAddCourse = async () => {
       const docRef = await addDoc(collection(db, 'classes'), {
         name: newCourse.name,
         gradeLevel: newCourse.grade,
-        teacherID: 'placeholder-teacher-id'
+        // teacherID: 'placeholder-teacher-id'
       });
 
       const querySnapshot = await getDocs(collection(db, 'classes'));
@@ -100,14 +100,14 @@ const handleDeleteCourse = async (courseId) => {
                       }}
                     />
                   </div>
-                  <p className="label">Teacher ID</p>
-                  <p className="value">
+                  {/* <p className="label">Teacher ID</p> */}
+                  {/* <p className="value">
                     {course.teacherID
                       ? typeof course.teacherID === 'object'
                         ? course.teacherID.id
                         : course.teacherID
                       : 'Not assigned'}
-                  </p>
+                  </p> */}
                   <p className="label">Grade Level</p>
                   <p className="value">{course.gradeLevel}</p>
                 </div>

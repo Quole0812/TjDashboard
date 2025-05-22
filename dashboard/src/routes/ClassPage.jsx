@@ -166,7 +166,7 @@ export default function ClassPage() {
                   teacherData.map((teacher) => (
                     <div key={teacher.id}>
                       <p>{teacher.email}</p>
-                      <p>{teacher.phone || "(111) 111-1111"}</p> {/* fallback if phone not stored */}
+                      <p>{teacher.phone}</p> {/* fallback if phone not stored */}
                     </div>
                   ))
                 ) : (
@@ -195,7 +195,8 @@ export default function ClassPage() {
                 <tbody>
                   {studentData.map((student) => {
                     const gradeEntry = gradesData.find(
-                      (g) => g.studentIDS.id === student.id // match student by ID
+                 
+                      (g) => g.studentIDs.id === student.id // match student by ID
                     );
 
                     return (
