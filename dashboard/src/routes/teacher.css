@@ -1,26 +1,15 @@
+
+  
+.teacher-header,
 .teacher-entry {
-    display: grid;
-    grid-template-columns: 2fr 1fr 2fr 3fr 1fr; /* Name, Grade, Phone, Email, Actions */
-    align-items: center;
-    gap: 20px;
-    padding: 12px;
-    white-space: nowrap; /* prevent wrapping */
-    padding-inline-end:3% ;
-  }
-  
-  .teacher-header {
-    display: grid;
-    grid-template-columns: 2fr 1fr 2fr 3fr 1fr; /* Name, Grade, Phone, Email, Actions */
-    align-items: center;
-    gap: 20px;
-    padding: 0px;
-    font-weight: bold;
-    font-size: large;
-    white-space: nowrap; /* prevent wrapping */
-    padding-inline-start: 2%;
-    padding-inline-end:3% ;
-  }
-  
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 3fr 1fr auto;
+  align-items: center;       /* vertical centering */   /* equal top/bottom padding */    /* match on both */
+  gap: 10px; 
+  box-sizing: border-box;
+  line-height: 1.4;          /* consistent spacing */
+}
+
   .teacher-actions {
     display: flex;
     justify-content: flex-end;

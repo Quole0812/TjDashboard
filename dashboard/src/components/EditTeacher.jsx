@@ -40,7 +40,7 @@ export default function EditTeacher({
       return;
     }
     if (name == currentName && gradeLevel == currentGrade && phoneNumber == currentPhone && email == currentEmail) {
-      alert("Please edit at least one field. Neither field can be empty.");
+      alert("Please edit at least one field. No field can be empty.");
       return;
     }
 
