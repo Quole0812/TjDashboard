@@ -51,23 +51,25 @@ main {
   border-collapse: collapse;
   /* margin-top: 1rem; */
   table-layout: fixed;
-  font-weight:bold;
+  /* font-weight:bold; */
 }
 
 .roster-table th,
 .roster-table td {
-  padding: 0.75rem;
+  padding: 1.5% 5%;
+  text-align: center;
   /* border-bottom: 1px solid #ccc; */
   background-color: #FFFFFF;
   /* text-align: left; */
   /* font-family: 'Courier New', Courier; */
   font-size: large;
   padding: 1.5% 5%;
+
 }
 
-.grade {
+/* .grade {
   font-weight: bold;
-}
+} */
 
 .rcorners {
   border-radius: 40px;
@@ -76,7 +78,7 @@ main {
 .table-wrapper {
   overflow: hidden;
   border-radius: 30px;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 .page-layout { 

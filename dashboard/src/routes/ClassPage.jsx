@@ -78,9 +78,15 @@ export default function ClassPage() {
               const gradeSnaps = await getDocs(gradesQuery);
 
               // match grade for the student in da class
-              const studentRefIds = classSnap.data().studentIDs.map(ref => ref.id);
+              const studentRefIds = (classSnap.data().studentIDs || []).map(ref =>
+                typeof ref === "string" ? ref : ref.id
+              );
               const filteredGrades = gradeSnaps.docs
-                .filter(g => studentRefIds.includes(g.data().studentIDs.id))
+                .filter(g => {
+                  const sid = g.data().studentID;
+                  const studentId = typeof sid === "string" ? sid : sid?.id;
+                  return studentId && studentRefIds.includes(studentId);
+                })
                 .map(g => ({ id: g.id, ...g.data() }));
 
               setGradesData(filteredGrades);
@@ -181,20 +187,21 @@ export default function ClassPage() {
             </Link>
         </div>
 
-        <div className="stats-container">
-            <div className="stat-card rcorners">
-                <h3>Average Grade</h3>
-                <p className="stat-value">{avgLetter}</p>
-            </div>
-            <div className="stat-card rcorners">
-                <h3>
-                  Student Enrolled
-                </h3>
-                <p className="stat-value">{studentData ? `${studentData.length}` : "Loading..."}</p>
-            </div>
-            <div className="stat-card stat-contact rcorners">
-                <h3>Contact Information</h3>
-                {teacherData.length > 0 ? (
+        {/* stat cards */}
+      <div className="dashboard-stats">
+        <div className="stat-card">
+          <div className="stat-title">Average Grade</div>
+          <p className="stat-value">{avgLetter}</p>
+        </div>
+        <div className="stat-card">
+          <div className="stat-title">Students Enrolled</div>
+          <div className="stat-value">{studentData.length}</div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-title">Contact Information</div>
+          <div className="stat-contact">
+            {teacherData.length > 0 ? (
               teacherData.map((teacher, index) => (
                 <div key={teacher.id} className="teacher-contact">
                   <strong>{teacher.name}</strong><br/>
@@ -206,8 +213,9 @@ export default function ClassPage() {
             ) : (
               <div>No instructors assigned</div>
             )}
-            </div>
+          </div>
         </div>
+      </div>
 
         <div className="roster-container">
             <h2>Student Roster</h2>
