@@ -26,10 +26,33 @@
     margin-bottom: 20px;
   }
   
-  .info-row {
+  /* .info-row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+  } */
+
+  .info-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .label {
+    flex: 0 0 120px; /* fixed width for alignment */
+    color: gray;
+    font-size: 18px;
+    margin-right: 10px; /* space between label and input */
+    white-space: nowrap;
+  }
+  
+  .input-field {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background-color: #f5f5f5;
   }
   
   .label {
