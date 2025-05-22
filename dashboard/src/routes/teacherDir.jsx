@@ -13,7 +13,23 @@ export default function TeacherDirectory() {
   const [noTeachers, setNoTeachers] = useState(false);
   const deleteTeacher = async (id) => {
     try {
+      //this delete the teacher
       await deleteDoc(doc(db, "teachers", id));
+
+      
+      //now remove teacher ID from all class roster
+      const classSnapshot = await getDocs(collection(db, "classes"));
+      classSnapshot.forEach(async (classDoc) => {
+        const data = classDoc.data();
+        console.log("ok lets see if any of these teacher actually exist")
+        if (data.teacherIDs && data.teacherIDs.includes(id)) {
+          console.log("omg we found a teacher lez delete them kekeke");
+          await updateDoc(doc(db, "classes", classDoc.id), {
+            teacherIDs: arrayRemove(id),
+          });
+        }
+      })
+
       fetchTeachers();
     } catch (error) {
       console.error("Error deleting teacher: ", error);
