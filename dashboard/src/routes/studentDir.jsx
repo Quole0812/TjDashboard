@@ -81,6 +81,7 @@ export default function StudentDirectory() {
   };
   useEffect(() => {
     fetchStudents();
+    console.log(students);
   }, []);
 
   return (
