@@ -660,6 +660,7 @@ const TeacherDashboard = () => {
             <FaPlus className="add-icon" /> Add Student
           </button>
         </div>
+        
         <table className="dashboard-table">
           <thead>
             <tr>
@@ -670,10 +671,12 @@ const TeacherDashboard = () => {
               <th>Actions</th>
             </tr>
           </thead>
+          </table>
+          <table className="dashboard-table">
           <tbody>
-            <tr className="table-gap-row">
+            {/* <tr className="table-gap-row">
               <td colSpan={6}></td>
-            </tr>
+            </tr> */}
             {dashboardStudents.map((student, idx) => (
               <tr key={student.id || idx}>
                 <td>{student.name}</td>
