@@ -79,6 +79,8 @@
 }
 
 .page-wrapper {
+  margin-left: 35px; 
+  /* margin-right: 100px; */
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
