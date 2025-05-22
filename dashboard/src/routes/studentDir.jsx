@@ -43,16 +43,17 @@ export default function StudentDirectory() {
 
       //now remove student ID from all class roster
       const classSnapshot = await getDocs(collection(db, "classes"));
-      classSnapshot.forEach(async (classDoc) => {
-        const data = classDoc.data();
-        console.log("ok lets see if any of these student actually exist")
-        if (data.studentIDs && data.studentIDs.includes(id)) {
-          console.log("omg we found a student lez delete them kekeke");
-          await updateDoc(doc(db, "classes", classDoc.id), {
-            studentIDs: arrayRemove(id),
-          });
-        }
-      })
+      for (const classDoc of classSnapshot.docs) {
+      const data = classDoc.data();
+      const updated = data.studentIDs?.some((ref) => ref.id === id || ref.path?.includes(id));
+        console.log("we made it here");
+        console.log(updated);
+      if (updated) {
+        await updateDoc(doc(db, "classes", classDoc.id), {
+          studentIDs: arrayRemove(doc(db, "students", id))
+        });
+      }
+    }
 
       //refresh list 
       fetchStudents();
