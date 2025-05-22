@@ -59,8 +59,9 @@ const TeacherDashboard = () => {
         if (classSnap.exists()) {
           const classDoc = classSnap.data();
           setClassData(classDoc);
-          setClassTeachers(classDoc.teacherIDs || []);
-          setClassStudents(classDoc.studentIDs || []);
+
+          setClassTeachers(classDoc.teacherIDs?.map(ref => ref.id) || []);
+          setClassStudents(classDoc.studentIDs?.map(ref => ref.id) || []);
         } else {
           console.warn("No such class document.");
         }
@@ -232,9 +233,10 @@ const TeacherDashboard = () => {
     try {
       // delete student from class
       const classRef = doc(db, "classes", id);
+      const studentRef = doc(db, "students", studentId);
       const updatedStudentIds = classStudents.filter(id => id !== studentId);
       await updateDoc(classRef, {
-        studentIDs: updatedStudentIds
+        studentIDs: updatedStudentIds.map(id => doc(db, "students", id))
       });
       
       // update state
@@ -250,9 +252,10 @@ const TeacherDashboard = () => {
     try {
       // delete teacher from class
       const classRef = doc(db, "classes", id);
+      const teacherRef = doc(db, "teachers", teacherId);
       const updatedTeacherIds = classTeachers.filter(id => id !== teacherId);
       await updateDoc(classRef, {
-        teacherIDs: updatedTeacherIds
+        teacherIDs: updatedTeacherIds.map(id => doc(db, "teachers", id))
       });
       
       // update state
