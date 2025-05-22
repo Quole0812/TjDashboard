@@ -3,12 +3,12 @@
 /* parent flex container: sidebar + page content */
 .layout {
   display: flex;
-  height: 100vh;        /* or whatever fits your layout */
+  height: 100vh; /* or whatever fits your layout */
 }
 
 /* wrap everything to the right of the sidebar */
 .content {
-  flex: 1;              /* fill remaining width */
+  flex: 1; /* fill remaining width */
   display: flex;
   flex-direction: column;
 }
@@ -31,16 +31,13 @@
   cursor: pointer;
 } */
 
-
-
 /* your scroll‐area: equal gutters on left & right */
 .scroll-container {
-
-  flex: 1;               /* fill remaining vertical space */
- margin: 1rem 40px;    
+  flex: 1; /* fill remaining vertical space */
+  margin: 1rem 40px;
   overflow-y: auto;
   margin-top: 1vh;
-  padding: 2rem;
+  padding: 1rem;
   margin-left: 300px;
   height: 90vh;
   width: 80vw;
@@ -50,7 +47,7 @@
   border-radius: 30px;
 }
 .scroll-container::-webkit-scrollbar {
-display: none;               /* Chrome, Safari, Opera */
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /* grid for each student row */
@@ -70,24 +67,22 @@ display: none;               /* Chrome, Safari, Opera */
   display: contents;
 }
 
+.student-header,
 .student-entry {
   display: grid;
-  grid-template-columns: 2fr 3fr 1fr auto; /* consistent across header & rows */
-  align-items: center;
-  font-weight: bold;
-  padding: 10px;
-  gap: 10px;
+  padding: 1rem;
+  grid-template-columns: 2fr 2fr 2fr 1fr auto;
+  align-items: center; /* vertical centering */ /* equal top/bottom padding */ /* match on both */
+  gap: 2px;
+  box-sizing: border-box;
+  line-height: 1.4; /* consistent spacing */
 }
 
-.student-header {
-  padding-inline-start: 3%;
-  padding-inline-end:4% ;
-  display: grid;
-  grid-template-columns: 2fr 3fr 1fr auto;
-  font-size:large;
-  font-weight: bold; /* consistent across header & rows */
-  align-items: center;
-  gap: 10px;
+.page-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .header-cell {
@@ -114,10 +109,13 @@ display: none;               /* Chrome, Safari, Opera */
 
 .student-actions {
   display: flex;
+  align-items: center;
+  justify-content: flex-start; /* ⬅️ important */
   gap: 10px;
-  justify-content: flex-end;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
-
 .icon-button {
   background: none;
   border: none;
@@ -131,7 +129,7 @@ display: none;               /* Chrome, Safari, Opera */
   transform: scale(1.2);
 }
 .main-footer {
-  margin-left: 300px;        /* offsets sidebar */
+  margin-left: 300px; /* offsets sidebar */
   width: calc(100% - 300px); /* fills remaining space */
   padding: 1rem 2rem;
   box-sizing: border-box;
