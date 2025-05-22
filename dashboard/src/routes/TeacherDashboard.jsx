@@ -9,6 +9,7 @@ import { useAuth } from '../components/AuthContext';
 
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { query, getDocs, collection, where, addDoc } from "firebase/firestore";
 
 const TeacherDashboard = () => {
   const { currentUser } = useAuth();
@@ -40,6 +41,8 @@ const TeacherDashboard = () => {
   const [teacherSearch, setTeacherSearch] = useState('');
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedTeachers, setSelectedTeachers] = useState([]);
+
+  const gradeOptions = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"];
 
   // fetch all students, teachers, and class data
   useEffect(() => {
@@ -173,9 +176,26 @@ const TeacherDashboard = () => {
   };
 
   // editing student/ teacher info
-  const handleEditStudent = (student) => {
-    setEditingStudent(student);
-    setShowEditStudentModal(true);
+  const handleEditStudent = async (student) => {
+    try {
+      // Fetch the student's grade for this class
+      const gradesQuery = query(
+        collection(db, "grades"),
+        where("studentID", "==", student.id),
+        where("classID", "==", id)
+      );
+      const gradeSnapshot = await getDocs(gradesQuery);
+      
+      const currentGrade = gradeSnapshot.empty ? "" : gradeSnapshot.docs[0].data().grade;
+      
+      setEditingStudent({
+        ...student,
+        academicGrade: currentGrade
+      });
+      setShowEditStudentModal(true);
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const handleEditTeacher = (teacher) => {
@@ -187,12 +207,36 @@ const TeacherDashboard = () => {
     e.preventDefault();
     setError('');
     try {
+      // First update the student's basic info
       const studentRef = doc(db, "students", editingStudent.id);
       await updateDoc(studentRef, {
         name: editingStudent.name,
         id: editingStudent.id,
-        grade: editingStudent.grade
+        gradeLevel: editingStudent.gradeLevel
       });
+
+      // Then handle the grade update in the Grades collection
+      const gradesQuery = query(
+        collection(db, "grades"),
+        where("studentID", "==", editingStudent.id),
+        where("classID", "==", id)
+      );
+      const gradeSnapshot = await getDocs(gradesQuery);
+
+      if (!gradeSnapshot.empty) {
+        // Update existing grade document
+        const gradeDoc = gradeSnapshot.docs[0];
+        await updateDoc(doc(db, "grades", gradeDoc.id), {
+          grade: editingStudent.academicGrade
+        });
+      } else {
+        // Create new grade document
+        await addDoc(collection(db, "grades"), {
+          studentID: editingStudent.id,
+          classID: id,
+          grade: editingStudent.academicGrade
+        });
+      }
       
       setStudents(students.map(s => 
         s.id === editingStudent.id ? editingStudent : s
@@ -268,6 +312,25 @@ const TeacherDashboard = () => {
   const dashboardTeachers = instructors.filter(t => classTeachers.includes(t.id));
   const dashboardStudents = students.filter(s => classStudents.includes(s.id));
 
+  const calculateClassAverage = (students) => {
+    const gradeToGPA = {
+      "A+": 4.0, "A": 4.0, "A-": 3.7,
+      "B+": 3.3, "B": 3.0, "B-": 2.7,
+      "C+": 2.3, "C": 2.0, "C-": 1.7,
+      "D+": 1.3, "D": 1.0, "D-": 0.7,
+      "F": 0.0
+    };
+
+    const validGrades = students
+      .filter(student => student.academicGrade && gradeToGPA[student.academicGrade] !== undefined)
+      .map(student => gradeToGPA[student.academicGrade]);
+
+    if (validGrades.length === 0) return "N/A";
+
+    const average = validGrades.reduce((sum, grade) => sum + grade, 0) / validGrades.length;
+    return average.toFixed(2);
+  };
+
   return (
     <main className="main-content">
       {/* Edit Student Modal */}
@@ -295,13 +358,29 @@ const TeacherDashboard = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Grade:</label>
+                <label>Grade Level:</label>
                 <input
                   type="text"
-                  value={editingStudent.grade}
-                  onChange={(e) => setEditingStudent({...editingStudent, grade: e.target.value})}
+                  value={editingStudent.gradeLevel}
+                  onChange={(e) => setEditingStudent({...editingStudent, gradeLevel: e.target.value})}
+                  placeholder="Enter grade level (e.g., 9, 10, 11, 12)"
                   required
                 />
+              </div>
+              <div className="form-group">
+                <label>Academic Grade:</label>
+                <select
+                  value={editingStudent.academicGrade || ""}
+                  onChange={(e) => setEditingStudent({...editingStudent, academicGrade: e.target.value})}
+                  required
+                >
+                  <option value="">Select a grade</option>
+                  {gradeOptions.map((grade) => (
+                    <option key={grade} value={grade}>
+                      {grade}
+                    </option>
+                  ))}
+                </select>
               </div>
               {error && <div className="form-error">{error}</div>}
               <div className="modal-actions">
@@ -532,15 +611,18 @@ const TeacherDashboard = () => {
       <div className="section">
         <div className="section-header">
           <div className="section-title">Student Roster</div>
-          <button className="add-student-btn" onClick={() => setShowStudentModal(true)}><FaPlus className="add-icon" /> Add Student</button>
+          <button className="add-student-btn" onClick={() => setShowStudentModal(true)}>
+            <FaPlus className="add-icon" /> Add Student
+          </button>
         </div>
         <table className="dashboard-table">
           <thead>
             <tr>
               <th>Student Name</th>
               <th>ID</th>
-              <th>Grade</th>
-              <td><FaEdit className="edit-icon" /></td> 
+              <th>Grade Level</th>
+              <th>Academic Grade</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -551,16 +633,23 @@ const TeacherDashboard = () => {
               <tr key={student.id || idx}>
                 <td>{student.name}</td>
                 <td>{student.id}</td>
-                <td>{student.grade}</td>
+                <td>{student.gradeLevel}</td>
+                <td>{student.academicGrade}</td>
                 <td>
                   <div className="tooltip">
-                    <FaEdit className="edit-icon" onClick={() => handleEditStudent(student)} />
+                    <FaEdit 
+                      className="edit-icon" 
+                      onClick={() => handleEditStudent(student)} 
+                    />
                     <span className="tooltiptext">Edit Student</span>
                   </div>
                 </td>
                 <td>
                   <div className="tooltip">
-                    <FaDeleteLeft className="delete-icon" onClick={(e) => deleteStudent(e, student.id)} />
+                    <FaDeleteLeft 
+                      className="delete-icon" 
+                      onClick={(e) => deleteStudent(e, student.id)} 
+                    />
                     <span className="tooltiptext">Delete Student</span>
                   </div>
                 </td>

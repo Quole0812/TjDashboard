@@ -75,21 +75,11 @@ export default function EditStudent({
                   placeholder="Enter grade level (e.g., 9, 10, 11, 12)"
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="academicGrade">Academic Grade:</label>
-                <input
-                  type="text"
-                  id="academicGrade"
-                  value={academicGrade}
-                  onChange={(e) => setAcademicGrade(e.target.value)}
-                  placeholder="Enter academic grade (e.g., A+, B-, C)"
-                />
-              </div>
               <div className="button-group">
                 <button type="submit">Update</button>
                 <button type="button" onClick={() => setShowPopup(false)}>
                   Cancel
-                </button>
+              </button>
               </div>
             </form>
           </div>

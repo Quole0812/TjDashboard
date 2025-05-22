@@ -8,7 +8,6 @@ export default function AddStudentToTJ({fetchStudents}) {
   const [showPopup, setShowPopup] = useState(false);
   const [name, setName] = useState("");
   const [gradeLevel, setGradeLevel] = useState("");
-  const [academicGrade, setAcademicGrade] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
@@ -20,25 +19,19 @@ export default function AddStudentToTJ({fetchStudents}) {
       alert("Please fill in the grade level field.");
       return;
     }
-    if (!academicGrade.trim()) {
-      alert("Please fill in the academic grade field.");
-      return;
-    }
 
     try {
       await addDoc(collection(db, "students"), {
         name: name.trim(),
         gradeLevel: gradeLevel.trim(),
-        academicGrade: academicGrade.trim(),
       });
-      console.log("Student saved:", { name, gradeLevel, academicGrade });
+      console.log("Student saved:", { name, gradeLevel });
     } catch (error) {
       console.error("Error adding document: ", error);
     }
     setShowPopup(false);
     setName("");
     setGradeLevel("");
-    setAcademicGrade("");
     fetchStudents();
   };
 
@@ -74,21 +67,11 @@ export default function AddStudentToTJ({fetchStudents}) {
                   placeholder="Enter grade level (e.g., 9, 10, 11, 12)"
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="academicGrade">Academic Grade:</label>
-                <input
-                  type="text"
-                  id="academicGrade"
-                  value={academicGrade}
-                  onChange={(e) => setAcademicGrade(e.target.value)}
-                  placeholder="Enter academic grade (e.g., A+, B-, C)"
-                />
-              </div>
               <div className="button-group">
                 <button type="submit">Add</button>
                 <button type="button" onClick={() => setShowPopup(false)}>
                   Cancel
-                </button>
+              </button>
               </div>
             </form>
           </div>

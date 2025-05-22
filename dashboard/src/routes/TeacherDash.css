@@ -140,7 +140,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.class-average {
+  background-color: #f0f0f0;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #333;
+  margin: 0 1rem;
 }
 
 .add-student-btn, .add-teacher-btn {
