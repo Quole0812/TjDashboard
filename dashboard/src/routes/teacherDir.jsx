@@ -70,20 +70,26 @@ export default function TeacherDirectory() {
                 <p>{teacher.phone}</p>
                 <p>{teacher.email}</p>
                 <div className="teacher-actions">
-                  <EditTeacher
-                    currentName={teacher.name}
-                    currentGrade={teacher.grade}
-                    currentEmail={teacher.email}
-                    currentPhone={teacher.phone}
-                    id={teacher.id}
-                    fetchTeachers={fetchTeachers}
-                  />
-                  <button
-                    className="icon-button"
-                    onClick={() => deleteTeacher(teacher.id)}
-                  >
-                    <VscError />
-                  </button>
+                  <div className="tooltip">
+                    <EditTeacher
+                      currentName={teacher.name}
+                      currentGrade={teacher.grade}
+                      currentEmail={teacher.email}
+                      currentPhone={teacher.phone}
+                      id={teacher.id}
+                      fetchTeachers={fetchTeachers}
+                    />
+                    <span className="tooltiptext">Edit Teacher</span>
+                  </div>
+                  <div className="tooltip">
+                    <button
+                      className="icon-button"
+                      onClick={() => deleteTeacher(teacher.id)}
+                    >
+                      <VscError />
+                    </button>
+                    <span className="tooltiptext">Delete Teacher</span>
+                  </div>
                 </div>
               </div>
             ))}

@@ -226,6 +226,42 @@ const TeacherDashboard = () => {
     }
   };
 
+  const deleteStudent = async (e, studentId) => {
+    e.preventDefault();
+    setError('');
+    try {
+      // delete student from class
+      const classRef = doc(db, "classes", id);
+      const updatedStudentIds = classStudents.filter(id => id !== studentId);
+      await updateDoc(classRef, {
+        studentIDs: updatedStudentIds
+      });
+      
+      // update state
+      setClassStudents(updatedStudentIds);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const deleteTeacher = async (e, teacherId) => {
+    e.preventDefault();
+    setError('');
+    try {
+      // delete teacher from class
+      const classRef = doc(db, "classes", id);
+      const updatedTeacherIds = classTeachers.filter(id => id !== teacherId);
+      await updateDoc(classRef, {
+        teacherIDs: updatedTeacherIds
+      });
+      
+      // update state
+      setClassTeachers(updatedTeacherIds);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const dashboardTeachers = instructors.filter(t => classTeachers.includes(t.id));
   const dashboardStudents = students.filter(s => classStudents.includes(s.id));
 
@@ -446,7 +482,7 @@ const TeacherDashboard = () => {
               <th>Instructor Name</th>
               <th>Email</th>
               <th>Phone Number</th>
-              <th><FaEdit className="edit-icon" /></th>
+              <th><FaEdit className="edit-icon-heading" /></th>
             </tr>
           </thead>
           <tbody>
@@ -458,8 +494,18 @@ const TeacherDashboard = () => {
                 <td>{inst.name}</td>
                 <td>{inst.email}</td>
                 <td>{inst.phone}</td>
-                <td><FaEdit className="edit-icon" onClick={() => handleEditTeacher(inst)} /></td>
-                <td><FaDeleteLeft className="delete-icon" /></td>
+                <td>
+                  <div className="tooltip">
+                    <FaEdit className="edit-icon" onClick={() => handleEditTeacher(inst)} />
+                    <span className="tooltiptext">Edit Teacher</span>
+                  </div>
+                </td>
+                <td>
+                  <div className="tooltip">
+                    <FaDeleteLeft className="delete-icon-heading" onClick={(e) => deleteTeacher(e, inst.id)} />
+                    <span className="tooltiptext">Delete Teacher</span>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -490,8 +536,18 @@ const TeacherDashboard = () => {
                 <td>{student.name}</td>
                 <td>{student.id}</td>
                 <td>{student.grade}</td>
-                <td><FaEdit className="edit-icon" onClick={() => handleEditStudent(student)} /></td>
-                <td><FaDeleteLeft className="delete-icon" /></td>
+                <td>
+                  <div className="tooltip">
+                    <FaEdit className="edit-icon" onClick={() => handleEditStudent(student)} />
+                    <span className="tooltiptext">Edit Student</span>
+                  </div>
+                </td>
+                <td>
+                  <div className="tooltip">
+                    <FaDeleteLeft className="delete-icon" onClick={(e) => deleteStudent(e, student.id)} />
+                    <span className="tooltiptext">Delete Student</span>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
