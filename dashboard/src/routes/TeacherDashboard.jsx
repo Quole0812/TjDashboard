@@ -664,11 +664,12 @@ const TeacherDashboard = () => {
         <table className="dashboard-table">
           <thead>
             <tr>
-              <th>Student Name</th>
-              <th>ID</th>
-              <th>Grade Level</th>
-              <th>Academic Grade</th>
-              <th>Actions</th>
+              <th style={{width: "22%"}}>Student Name</th>
+              <th style={{width: "20%"}}>ID</th>
+              <th style={{width: "15%"}}>Grade Level</th>
+              <th style={{width: "18%"}}>Academic Grade</th>
+              <th style={{width: "12.5%"}}>Actions</th>
+              <th style={{width: "12.5%"}}></th>
             </tr>
           </thead>
           </table>
@@ -679,11 +680,11 @@ const TeacherDashboard = () => {
             </tr> */}
             {dashboardStudents.map((student, idx) => (
               <tr key={student.id || idx}>
-                <td>{student.name}</td>
-                <td>{student.id}</td>
-                <td>{student.gradeLevel}</td>
-                <td>{student.academicGrade}</td>
-                <td>
+                <td style={{width: "22%"}}>{student.name}</td>
+                <td style={{width: "20%"}}>{student.id}</td>
+                <td style={{width: "15%"}}>{student.gradeLevel}</td>
+                <td style={{width: "18%"}}>{student.academicGrade}</td>
+                <td style={{width: "12.5%"}}>
                   <div className="tooltip">
                     <FaEdit 
                       className="edit-icon" 
@@ -692,7 +693,7 @@ const TeacherDashboard = () => {
                     <span className="tooltiptext">Edit Student</span>
                   </div>
                 </td>
-                <td>
+                <td style={{width: "12.5%"}}>
                   <div className="tooltip">
                     <FaDeleteLeft 
                       className="delete-icon" 
