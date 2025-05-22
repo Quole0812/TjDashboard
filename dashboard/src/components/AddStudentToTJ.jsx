@@ -9,7 +9,7 @@ export default function AddStudentToTJ({fetchStudents}) {
   const [gradeLevel, setGradeLevel] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault(); 
-    if(!name.trim()){
+    if(!name.trim()){}
       alert("Please fill in the name field.");
       return;
     }
