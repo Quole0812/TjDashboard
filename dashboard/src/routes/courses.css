@@ -58,9 +58,13 @@ html, body{
   flex: 0 0 calc((100% - 40px) / 3); /* 3 columns with two 20px gaps */
   min-width: 300px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* Add this */
+  align-items: stretch;
 }
 
-.course-card {
+.course-card{
+  min-height: 180px;
   color: black;
   background-color: white;
   padding: 20px;
@@ -68,8 +72,9 @@ html, body{
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 10px;
 }
+
 
 .card-header {
   display: flex;
@@ -88,10 +93,14 @@ html, body{
 
 .label {
   color: gray;
-  margin-top: 10px;
-  margin-bottom: 2px;
+  margin: 0;               /* eliminate excess margin */
+  max-height: 5px;
   font-size: 14px;
+  display: inline-block;   /* make it respect content size only */
+  line-height: 1.2;        /* slightly tighter line spacing */
+  height: auto;            /* allow content to define height */
 }
+
 
 .value {
   font-size: 16px;
