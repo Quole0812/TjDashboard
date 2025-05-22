@@ -672,7 +672,7 @@ const TeacherDashboard = () => {
           </thead>
           <tbody>
             <tr className="table-gap-row">
-              <td colSpan={5}></td>
+              <td colSpan={6}></td>
             </tr>
             {dashboardStudents.map((student, idx) => (
               <tr key={student.id || idx}>
