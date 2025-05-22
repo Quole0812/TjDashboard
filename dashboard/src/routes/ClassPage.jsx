@@ -41,8 +41,8 @@ export default function ClassPage() {
         //student list 
         try {
           console.log("bruh")
-          if (classSnap.data().studentID?.length) {
-            const studentFetches = classSnap.data().studentID.map(async (ref) => {
+          if (classSnap.data().studentIDs?.length) {
+            const studentFetches = classSnap.data().studentIDs.map(async (ref) => {
               const snap = await getDoc(ref);
               return { id: ref.id, ...snap.data() };
             });
@@ -56,9 +56,9 @@ export default function ClassPage() {
               const gradeSnaps = await getDocs(gradesQuery);
 
               // match grade for the student in da class
-              const studentRefIds = classSnap.data().studentID.map(ref => ref.id);
+              const studentRefIds = classSnap.data().studentIDs.map(ref => ref.id);
               const filteredGrades = gradeSnaps.docs
-                .filter(g => studentRefIds.includes(g.data().studentID.id))
+                .filter(g => studentRefIds.includes(g.data().studentIDs.id))
                 .map(g => ({ id: g.id, ...g.data() }));
 
               setGradesData(filteredGrades);
@@ -74,8 +74,8 @@ export default function ClassPage() {
         //teacher list 
         try {
           console.log("bruh 2")
-          if (classSnap.data().teacherID?.length) {
-            const teacherFetches = classSnap.data().teacherID.map(async (ref) => {
+          if (classSnap.data().teacherIDs?.length) {
+            const teacherFetches = classSnap.data().teacherIDs.map(async (ref) => {
               const snap2 = await getDoc(ref);
               return { id: ref.id, ...snap2.data() };
             });
@@ -195,7 +195,7 @@ export default function ClassPage() {
                 <tbody>
                   {studentData.map((student) => {
                     const gradeEntry = gradesData.find(
-                      (g) => g.studentID.id === student.id // match student by ID
+                      (g) => g.studentIDs.id === student.id // match student by ID
                     );
 
                     return (
