@@ -18,9 +18,9 @@
     transform: translateY(-5px) scale(1.03);
   }
   
-  .dashboard-widget-spacer {
+  /* .dashboard-widget-spacer {
     flex: 1 1 auto;
-  }
+  } */
   
   .dashboard-widget-title {
     background: #fff;
@@ -31,4 +31,16 @@
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
     box-sizing: border-box;
+  }
+
+  .dashboard-widget-spacer {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .dashboard-widget-spacer svg {
+    font-size: 4rem; /* Adjust as needed */
+    color: white;
   }
