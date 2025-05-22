@@ -16,8 +16,8 @@
     margin-left: 300px;
     width: 80vw; /* Or set a max-width if needed */
     background: white;
-    border: 2px solid black;
-    border-radius: 8px;
+    /* border: 2px solid black; */
+    border-radius: 30px;
     box-sizing: border-box;
     display: inline-block;
   }
@@ -46,8 +46,8 @@
     width: 80vw;
     box-sizing: border-box;
     background: white;
-    border: 2px solid black;
-    border-radius: 8px;
+    /* border: 2px solid black; */
+    border-radius: 30px;
   }
   .scroll-container::-webkit-scrollbar {
   display: none;               /* Chrome, Safari, Opera */
@@ -74,20 +74,25 @@
     display: grid;
     grid-template-columns: 2fr 3fr 1fr auto; /* consistent across header & rows */
     align-items: center;
-    padding: 12px;
+    font-weight: bold;
+    padding: 10px;
     gap: 10px;
   }
   
   .student-header {
+    padding-inline-start: 3%;
+    padding-inline-end:4% ;
     display: grid;
-    grid-template-columns: 2fr 3fr 1fr auto; /* consistent across header & rows */
+    grid-template-columns: 2fr 3fr 1fr auto;
+    font-size:large;
+    font-weight: bold; /* consistent across header & rows */
     align-items: center;
     gap: 10px;
   }
   
   .header-cell {
     margin: 0;
-    font-weight: 600;
+    font-weight: bold;
   }
   
   .student-button {
