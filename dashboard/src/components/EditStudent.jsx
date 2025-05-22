@@ -72,6 +72,7 @@ export default function EditStudent({
                   className="input-field"
                   value={gradeLevel}
                   onChange={(e) => setGradeLevel(e.target.value)}
+
                 />
               </div>
               <button type="submit" className="add-button">

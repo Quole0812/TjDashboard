@@ -7,6 +7,7 @@ export default function AddStudentToTJ({fetchStudents}) {
   const [showPopup, setShowPopup] = useState(false);
   const [name, setName] = useState("");
   const [gradeLevel, setGradeLevel] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault(); 
     if(!name.trim()){
@@ -14,14 +15,16 @@ export default function AddStudentToTJ({fetchStudents}) {
       return;
     }
     if (!gradeLevel.trim()) {
-      alert("Please fill in the grade field.");
+      alert("Please fill in the grade level field.");
+
       return;
     }
 
     try {
       await addDoc(collection(db, "students"), {
         name: name.trim(),
-        grade: gradeLevel.trim(),
+        gradeLevel: gradeLevel.trim(),
+
       });
       console.log("Student saved:", { name, gradeLevel });
     } catch (error) {
@@ -66,12 +69,13 @@ export default function AddStudentToTJ({fetchStudents}) {
                   required
                 />
               </div>
-              <button type="submit" className="add-button">
-                Submit
+              <div className="button-group">
+                <button type="submit">Add</button>
+                <button type="button" onClick={() => setShowPopup(false)}>
+                  Cancel
               </button>
-              <button type="button" className="add-button" onClick={() => setShowPopup(false)}>
-                Close
-              </button>
+              </div>
+
             </form>
           </div>
         </div>

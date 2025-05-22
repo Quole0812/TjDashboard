@@ -9,6 +9,7 @@ import { useAuth } from '../components/AuthContext';
 
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { query, getDocs, collection, where, addDoc } from "firebase/firestore";
 
 const TeacherDashboard = () => {
   const { currentUser } = useAuth();
@@ -18,6 +19,14 @@ const TeacherDashboard = () => {
   if (!currentUser) {
     return <Navigate to="/login" />;
   }
+
+  const gradeToGPA = {
+    "A+": 4.0, "A": 4.0, "A-": 3.7,
+    "B+": 3.3, "B": 3.0, "B-": 2.7,
+    "C+": 2.3, "C": 2.0, "C-": 1.7,
+    "D+": 1.3, "D": 1.0, "D-": 0.7,
+    "F": 0.0
+  };
 
   const [students, setStudents] = useState([]);
   const [instructors, setInstructors] = useState([]);
@@ -41,6 +50,8 @@ const TeacherDashboard = () => {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedTeachers, setSelectedTeachers] = useState([]);
 
+  const gradeOptions = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"];
+
   // fetch all students, teachers, and class data
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +73,31 @@ const TeacherDashboard = () => {
 
           setClassTeachers(classDoc.teacherIDs?.map(ref => ref.id) || []);
           setClassStudents(classDoc.studentIDs?.map(ref => ref.id) || []);
+
+          // Fetch grades for all students in this class
+          const gradesQuery = query(
+            collection(db, "grades"),
+            where("classID", "==", classRef)
+          );
+          const gradesSnapshot = await getDocs(gradesQuery);
+          const gradesData = gradesSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          setGradesData(gradesData);
+
+          // Update students with their grades
+          const updatedStudents = studentsData.map(student => {
+            const studentRef = doc(db, "students", student.id);
+            const studentGrade = gradesData.find(
+              grade => grade.studentID.id === studentRef.id
+            );
+            return {
+              ...student,
+              academicGrade: studentGrade?.grade || ""
+            };
+          });
+          setStudents(updatedStudents);
         } else {
           console.warn("No such class document.");
         }
@@ -173,9 +209,27 @@ const TeacherDashboard = () => {
   };
 
   // editing student/ teacher info
-  const handleEditStudent = (student) => {
-    setEditingStudent(student);
-    setShowEditStudentModal(true);
+  const handleEditStudent = async (student) => {
+    try {
+      // Fetch the student's grade for this class
+      const studentRef = doc(db, "students", student.id);
+      const gradesQuery = query(
+        collection(db, "grades"),
+        where("studentID", "==", studentRef),
+        where("classID", "==", doc(db, "classes", id))
+      );
+      const gradeSnapshot = await getDocs(gradesQuery);
+      
+      const currentGrade = gradeSnapshot.empty ? "" : gradeSnapshot.docs[0].data().grade;
+      
+      setEditingStudent({
+        ...student,
+        academicGrade: currentGrade
+      });
+      setShowEditStudentModal(true);
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const handleEditTeacher = (teacher) => {
@@ -187,16 +241,68 @@ const TeacherDashboard = () => {
     e.preventDefault();
     setError('');
     try {
+      // update student's basic info
       const studentRef = doc(db, "students", editingStudent.id);
       await updateDoc(studentRef, {
         name: editingStudent.name,
-        id: editingStudent.id,
-        grade: editingStudent.grade
+        gradeLevel: editingStudent.gradeLevel
       });
+
+      //handle grade update in Grades collection
+      const studentGradeQuery = query(
+        collection(db, "grades"),
+        where("studentID", "==", studentRef),
+        where("classID", "==", doc(db, "classes", id))
+      );
+      const gradeSnapshot = await getDocs(studentGradeQuery);
+
+      if (!gradeSnapshot.empty) {
+        // update existing grade doc
+        const gradeDoc = gradeSnapshot.docs[0];
+        await updateDoc(doc(db, "grades", gradeDoc.id), {
+          grade: editingStudent.academicGrade
+        });
+      } else {
+        // create new grade doc
+        await addDoc(collection(db, "grades"), {
+          studentID: studentRef,
+          classID: doc(db, "classes", id),
+          grade: editingStudent.academicGrade
+        });
+      }
       
-      setStudents(students.map(s => 
-        s.id === editingStudent.id ? editingStudent : s
-      ));
+      // refresh data
+      const [studentsData, teachersData] = await Promise.all([
+        fetchStudents(),
+        fetchTeachers()
+      ]);
+
+      // fetch updated grades
+      const classRef = doc(db, "classes", id);
+      const classGradesQuery = query(
+        collection(db, "grades"),
+        where("classID", "==", classRef)
+      );
+      const gradesSnapshot = await getDocs(classGradesQuery);
+      const gradesData = gradesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setGradesData(gradesData);
+
+      // update students w/ their grades
+      const updatedStudents = studentsData.map(student => {
+        const studentRef = doc(db, "students", student.id);
+        const studentGrade = gradesData.find(
+          grade => grade.studentID.id === studentRef.id
+        );
+        return {
+          ...student,
+          academicGrade: studentGrade?.grade || ""
+        };
+      });
+      setStudents(updatedStudents);
+      setInstructors(teachersData);
       
       setShowEditStudentModal(false);
       setEditingStudent(null);
@@ -268,6 +374,17 @@ const TeacherDashboard = () => {
   const dashboardTeachers = instructors.filter(t => classTeachers.includes(t.id));
   const dashboardStudents = students.filter(s => classStudents.includes(s.id));
 
+  const calculateClassAverage = (students) => {
+    const validGrades = students
+      .filter(student => student.academicGrade && gradeToGPA[student.academicGrade] !== undefined)
+      .map(student => gradeToGPA[student.academicGrade]);
+
+    if (validGrades.length === 0) return "N/A";
+
+    const average = validGrades.reduce((sum, grade) => sum + grade, 0) / validGrades.length;
+    return average.toFixed(2);
+  };
+
   return (
     <main className="main-content">
       {/* Edit Student Modal */}
@@ -286,22 +403,29 @@ const TeacherDashboard = () => {
                 />
               </div>
               <div className="form-group">
-                <label>ID:</label>
+                <label>Grade Level:</label>
                 <input
                   type="text"
-                  value={editingStudent.id}
-                  onChange={(e) => setEditingStudent({...editingStudent, id: e.target.value})}
+                  value={editingStudent.gradeLevel}
+                  onChange={(e) => setEditingStudent({...editingStudent, gradeLevel: e.target.value})}
+                  placeholder="Enter grade level (e.g., 9, 10, 11, 12)"
                   required
                 />
               </div>
               <div className="form-group">
-                <label>Grade:</label>
-                <input
-                  type="text"
-                  value={editingStudent.grade}
-                  onChange={(e) => setEditingStudent({...editingStudent, grade: e.target.value})}
+                <label>Academic Grade:</label>
+                <select
+                  value={editingStudent.academicGrade || ""}
+                  onChange={(e) => setEditingStudent({...editingStudent, academicGrade: e.target.value})}
                   required
-                />
+                >
+                  <option value="">Select a grade</option>
+                  {gradeOptions.map((grade) => (
+                    <option key={grade} value={grade}>
+                      {grade}
+                    </option>
+                  ))}
+                </select>
               </div>
               {error && <div className="form-error">{error}</div>}
               <div className="modal-actions">
@@ -532,35 +656,45 @@ const TeacherDashboard = () => {
       <div className="section">
         <div className="section-header">
           <div className="section-title">Student Roster</div>
-          <button className="add-student-btn" onClick={() => setShowStudentModal(true)}><FaPlus className="add-icon" /> Add Student</button>
+          <button className="add-student-btn" onClick={() => setShowStudentModal(true)}>
+            <FaPlus className="add-icon" /> Add Student
+          </button>
         </div>
         <table className="dashboard-table">
           <thead>
             <tr>
               <th>Student Name</th>
               <th>ID</th>
-              <th>Grade</th>
-              <td><FaEdit className="edit-icon" /></td> 
+              <th>Grade Level</th>
+              <th>Academic Grade</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr className="table-gap-row">
-              <td colSpan={5}></td>
+              <td colSpan={6}></td>
             </tr>
             {dashboardStudents.map((student, idx) => (
               <tr key={student.id || idx}>
                 <td>{student.name}</td>
                 <td>{student.id}</td>
-                <td>{student.grade}</td>
+                <td>{student.gradeLevel}</td>
+                <td>{student.academicGrade}</td>
                 <td>
                   <div className="tooltip">
-                    <FaEdit className="edit-icon" onClick={() => handleEditStudent(student)} />
+                    <FaEdit 
+                      className="edit-icon" 
+                      onClick={() => handleEditStudent(student)} 
+                    />
                     <span className="tooltiptext">Edit Student</span>
                   </div>
                 </td>
                 <td>
                   <div className="tooltip">
-                    <FaDeleteLeft className="delete-icon" onClick={(e) => deleteStudent(e, student.id)} />
+                    <FaDeleteLeft 
+                      className="delete-icon" 
+                      onClick={(e) => deleteStudent(e, student.id)} 
+                    />
                     <span className="tooltiptext">Delete Student</span>
                   </div>
                 </td>
