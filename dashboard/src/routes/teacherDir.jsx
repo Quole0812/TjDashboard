@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import { teachers } from "../data/listteachers";
 import { useState, useEffect } from "react";
 import "./teacher.css";
+import "./directory.css";
 import AddTeacherToTJ from "../components/AddTeacherToTJ";
 import EditTeacher from "../components/EditTeacher";
 import { VscError } from "react-icons/vsc";
