@@ -4,7 +4,6 @@ import Sidebar from "../components/Sidebar";
 import { useState } from "react";
 import { VscError } from "react-icons/vsc";
 // import { students } from "../data/liststudents";
-import Button from "@mui/material/Button";
 import "./directory.css";
 import AddStudentToTJ from "../components/AddStudentToTJ";
 // import AddToTJ from "../components/AddToTJ";
@@ -17,10 +16,6 @@ import {
   deleteDoc,
   updateDoc,
   doc,
-  DocumentReference,
-  arrayRemove,
-  query,
-  where,
 } from "firebase/firestore";
 
 export default function StudentDirectory() {
@@ -29,32 +24,7 @@ export default function StudentDirectory() {
 
   const deleteStudent = async (id) => {
     try {
-      //ok dis delete the student object
       await deleteDoc(doc(db, "students", id));
-
-      //now we delete any grade record for that student if exist 
-      console.log("ok let's see if we need to delete any grade");
-      const gradeQuery = query(collection(db, 'grades'), where ("studentId", "==", id));
-      const gradeSnap = await getDocs(gradeQuery);
-      gradeSnap.forEach(async (docRef) => {
-        await deleteDoc(doc(db, "grades", docRef.id));
-      });
-
-
-      //now remove student ID from all class roster
-      const classSnapshot = await getDocs(collection(db, "classes"));
-      classSnapshot.forEach(async (classDoc) => {
-        const data = classDoc.data();
-        console.log("ok lets see if any of these student actually exist")
-        if (data.studentIDs && data.studentIDs.includes(id)) {
-          console.log("omg we found a student lez delete them kekeke");
-          await updateDoc(doc(db, "classes", classDoc.id), {
-            studentIDs: arrayRemove(id),
-          });
-        }
-      })
-
-      //refresh list 
       fetchStudents();
     } catch (error) {
       console.error("Error deleting student: ", error);
@@ -81,64 +51,65 @@ export default function StudentDirectory() {
   };
   useEffect(() => {
     fetchStudents();
-    console.log(students);
   }, []);
 
   return (
     <>
-      <Sidebar />
-      <div className="layout">
-        <div className="content">
-          <div className="main-footer">
-            <div className="header-row">
-              <h1>Student Directory</h1>
-              <AddStudentToTJ fetchStudents={fetchStudents} />
+      <div className="page-wrapper">
+        <Sidebar />
+        <div className="layout">
+          <div className="content">
+            <div className="main-footer">
+              <div className="header-row">
+                <h1>Student Directory</h1>
+                <AddStudentToTJ fetchStudents={fetchStudents} />
+              </div>
             </div>
-          </div>
-          <div className="categories">
-            <div className="student-header">
-              <p className="header-cell">Name</p>
-              <p className="header-cell">ID</p>
-              <p className="header-cell">Grade</p>
-              <p className="header-cell">Actions</p>
+            <div className="categories">
+              <div className="student-header">
+                <p className="header-cell">Name</p>
+                <p className="header-cell">ID</p>
+                <p className="header-cell">Grade</p>
+                <p className="header-cell">Actions</p>
+              </div>
             </div>
-          </div>
 
-          <div className="scroll-container">
-            {!noStudents &&
-              students.map((student, i) => (
-                <div key={i} className="student-card student-entry">
-                  <p>{student.name}</p>
-                  <p>{student.id}</p>
-                  <p>{student.grade}</p>
+            <div className="scroll-container">
+              {!noStudents &&
+                students.map((student, i) => (
+                  <div key={i} className="student-card student-entry">
+                    <p>{student.name}</p>
+                    <p>{student.id}</p>
+                    <p>{student.grade}</p>
 
-                  <div className="student-actions">
-                    <div className="tooltip">
-                      <EditStudent
-                        currentName={student.name}
-                        currentGrade={student.grade}
-                        id={student.id}
-                        fetchStudents={fetchStudents}
-                      />
-                      <span className="tooltiptext">Edit Student</span>
-                    </div>
-                    <div className="tooltip">
-                      <button
-                        className="icon-button"
-                        onClick={() => deleteStudent(student.id)}
-                      >
-                        <VscError />
-                      </button>
-                      <span className="tooltiptext">Delete Student</span>
+                    <div className="student-actions">
+                      <div className="tooltip">
+                        <EditStudent
+                          currentName={student.name}
+                          currentGrade={student.grade}
+                          id={student.id}
+                          fetchStudents={fetchStudents}
+                        />
+                        <span className="tooltiptext">Edit Student</span>
+                      </div>
+                      <div className="tooltip">
+                        <button
+                          className="icon-button"
+                          onClick={() => deleteStudent(student.id)}
+                        >
+                          <VscError />
+                        </button>
+                        <span className="tooltiptext">Delete Student</span>
+                      </div>
                     </div>
                   </div>
+                ))}
+              {noStudents && (
+                <div className="no-students">
+                  <h2>No students found.</h2>
                 </div>
-              ))}
-            {noStudents && (
-              <div className="no-students">
-                <h2>No students found.</h2>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

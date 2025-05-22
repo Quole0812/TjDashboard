@@ -3,7 +3,6 @@ import "./AddToTJ.css";
 import { db } from "../../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { IoIosAdd } from "react-icons/io";
-
 export default function AddStudentToTJ({fetchStudents}) {
   const [showPopup, setShowPopup] = useState(false);
   const [name, setName] = useState("");
@@ -17,6 +16,7 @@ export default function AddStudentToTJ({fetchStudents}) {
     }
     if (!gradeLevel.trim()) {
       alert("Please fill in the grade level field.");
+
       return;
     }
 
@@ -24,6 +24,7 @@ export default function AddStudentToTJ({fetchStudents}) {
       await addDoc(collection(db, "students"), {
         name: name.trim(),
         gradeLevel: gradeLevel.trim(),
+
       });
       console.log("Student saved:", { name, gradeLevel });
     } catch (error) {
@@ -37,34 +38,35 @@ export default function AddStudentToTJ({fetchStudents}) {
 
   return (
     <>
-      <button className="add-button" onClick={() => setShowPopup(true)}>
-        <IoIosAdd className="add-icon" />
+      <button className="add-button-icon" onClick={() => setShowPopup(true)}>
+        <IoIosAdd size={25} />
         Add Student
-      </button>
+        
+        </button>
 
       {showPopup && (
-        <div className="popup-overlay">
+        <div className="overlay">
           <div className="popup">
-            <h2>Add New Student</h2>
+            <h2>Add Student to Thomas Jefferson Elementary</h2>
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="name">Name:</label>
+              <div className="info-row">
+                <label className="label">Name:</label>
                 <input
                   type="text"
-                  id="name"
+                  className="input-field"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter student name"
+                  required
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="gradeLevel">Grade Level:</label>
+              <div className="info-row">
+                <label className="label">Grade Level:</label>
                 <input
-                  type="text"
-                  id="gradeLevel"
+                  type="number"
+                  className="input-field"
                   value={gradeLevel}
                   onChange={(e) => setGradeLevel(e.target.value)}
-                  placeholder="Enter grade level (e.g., 9, 10, 11, 12)"
+                  required
                 />
               </div>
               <div className="button-group">
@@ -73,6 +75,7 @@ export default function AddStudentToTJ({fetchStudents}) {
                   Cancel
               </button>
               </div>
+
             </form>
           </div>
         </div>

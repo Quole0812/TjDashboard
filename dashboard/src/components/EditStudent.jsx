@@ -3,84 +3,88 @@ import "./EditAtTJ.css";
 import { db } from "../../firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { FaPencilAlt } from "react-icons/fa";
-
 export default function EditStudent({
-  currentGradeLevel,
-  currentAcademicGrade,
+  currentGrade,
   currentName,
   id,
   fetchStudents,
 }) {
   const [showPopup, setShowPopup] = useState(false);
   const [name, setName] = useState(currentName);
-  const [gradeLevel, setGradeLevel] = useState(currentGradeLevel);
-  const [academicGrade, setAcademicGrade] = useState(currentAcademicGrade);
-
+  const [gradeLevel, setGradeLevel] = useState(currentGrade);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name.trim() || !gradeLevel.trim() || !academicGrade.trim()) {
+    if (!name.trim() || !gradeLevel.trim()) {
       alert("Please fill in all fields.");
       return;
     }
-    if (name === currentName && gradeLevel === currentGradeLevel && academicGrade === currentAcademicGrade) {
-      alert("Please edit at least one field. No fields can be empty.");
+    if (name == currentName && gradeLevel == currentGrade) {
+      alert("Please edit at least one field. Neither field can be empty.");
       return;
     }
 
     try {
       await updateDoc(doc(db, "students", id), {
         name: name.trim(),
-        gradeLevel: gradeLevel.trim(),
-        academicGrade: academicGrade.trim(),
+        grade: gradeLevel.trim(),
       });
-      console.log("Student updated:", { name, gradeLevel, academicGrade });
+      console.log("Student saved:", { name, gradeLevel });
     } catch (error) {
-      console.error("Error updating document: ", error);
+      console.error("Error adding document: ", error);
     }
     setShowPopup(false);
     setName("");
     setGradeLevel("");
-    setAcademicGrade("");
     fetchStudents();
   };
 
   return (
     <>
-      <button className="edit-button" onClick={() => setShowPopup(true)}>
-        <FaPencilAlt className="edit-icon" />
+      <button
+        className="icon-button"
+        onClick={() => {
+          setName(currentName);
+          setGradeLevel(currentGrade);
+          setShowPopup(true);
+        }}
+      >
+        <FaPencilAlt />
       </button>
 
       {showPopup && (
-        <div className="popup-overlay">
+        <div className="overlay">
           <div className="popup">
-            <h2>Edit Student</h2>
+            <h2>Edit Student at Thomas Jefferson Elementary</h2>
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="name">Name:</label>
+              <div className="info-row">
+                <label className="label">Name:</label>
                 <input
                   type="text"
-                  id="name"
+                  className="input-field"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter student name"
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="gradeLevel">Grade Level:</label>
+              <div className="info-row">
+                <label className="label">Grade Level:</label>
                 <input
-                  type="text"
-                  id="gradeLevel"
+                  type="number"
+                  className="input-field"
                   value={gradeLevel}
                   onChange={(e) => setGradeLevel(e.target.value)}
-                  placeholder="Enter grade level (e.g., 9, 10, 11, 12)"
+
                 />
               </div>
-              <div className="button-group">
-                <button type="submit">Update</button>
-                <button type="button" onClick={() => setShowPopup(false)}>
-                  Cancel
+              <button type="submit" className="add-button">
+                Submit
               </button>
-              </div>
+              <button
+                type="button"
+                className="add-button"
+                onClick={() => setShowPopup(false)}
+              >
+                Close
+              </button>
             </form>
           </div>
         </div>

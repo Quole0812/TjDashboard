@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import Sidebar from '../components/Sidebar';
 import { useEffect, useState } from "react";
 import "./ClassPage.css";
-import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, query, where, updateDoc, arrayRemove } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export default function ClassPage() {
@@ -40,14 +40,36 @@ export default function ClassPage() {
           console.log(classSnap.data());
         //student list 
         try {
-          console.log("bruh")
+          console.log("bruh");
+
           if (classSnap.data().studentIDs?.length) {
-            const studentFetches = classSnap.data().studentIDs.map(async (ref) => {
+            // const studentFetches = classSnap.data().studentIDs.map(async (ref) => {
+            //   const snap = await getDoc(ref);
+            //   return { id: ref.id, ...snap.data() };
+            // });
+            // const allStudents = await Promise.all(studentFetches);
+            // setStudentData(allStudents);
+          
+            const studentIDs = classSnap.data().studentIDs || [];
+            const validStudents = [];
+
+            for (const refOrId of studentIDs) {
+              const ref = typeof refOrId === "string" ? doc(db, "students", refOrId) : refOrId;
               const snap = await getDoc(ref);
-              return { id: ref.id, ...snap.data() };
-            });
-            const allStudents = await Promise.all(studentFetches);
-            setStudentData(allStudents);
+
+              if (snap.exists()) {
+                validStudents.push({ id: ref.id, ...snap.data() });
+              } else {
+                await updateDoc(classRef, {
+                  studentIDs: arrayRemove(ref)
+                });
+                console.warn(`Removed missing student ${ref.id || ref} from class ${classRef.id}`);
+              }
+            }
+
+            setStudentData(validStudents);
+
+
             try {
               const gradesQuery = query(
                 collection(db, "grades"),
@@ -66,7 +88,7 @@ export default function ClassPage() {
             } catch (e3) {
               console.error("Error fetching grades:", e3);
             }
-            console.log(allStudents)
+            console.log(validStudents)
           }
         } catch (e2) {
           console.error("Error fetching student:", e2);
@@ -74,16 +96,26 @@ export default function ClassPage() {
         //teacher list 
         try {
           console.log("bruh 2")
-          if (classSnap.data().teacherIDs?.length) {
-            const teacherFetches = classSnap.data().teacherIDs.map(async (ref) => {
-              const snap2 = await getDoc(ref);
-              return { id: ref.id, ...snap2.data() };
-            });
-            const allTeachers = await Promise.all(teacherFetches);
-            setTeacherData(allTeachers);
-            console.log("here is da teacher")
-            console.log(allTeachers);
+          const teacherIDs = classSnap.data().teacherIDs || [];
+          const validTeachers = [];
+
+          for (const refOrId of teacherIDs) {
+            const ref = typeof refOrId === "string" ? doc(db, "teachers", refOrId) : refOrId;
+            const snap = await getDoc(ref);
+
+            if (snap.exists()) {
+              validTeachers.push({ id: ref.id, ...snap.data() });
+            } else {
+              await updateDoc(classRef, {
+                teacherIDs: arrayRemove(ref) // this removes either the string or the DocumentReference
+              });
+              console.warn(`Removed missing teacher ${ref.id || ref} from class ${classRef.id}`);
+            }
           }
+
+          setTeacherData(validTeachers);
+          console.log("here is da teacher");
+          console.log(validTeachers);
         } catch (e2) {
           console.error("Error fetching teacher:", e2);
         }
@@ -160,18 +192,20 @@ export default function ClassPage() {
                 </h3>
                 <p className="stat-value">{studentData ? `${studentData.length}` : "Loading..."}</p>
             </div>
-            <div className="stat-card rcorners">
+            <div className="stat-card stat-contact rcorners">
                 <h3>Contact Information</h3>
                 {teacherData.length > 0 ? (
-                  teacherData.map((teacher) => (
-                    <div key={teacher.id}>
-                      <p>{teacher.email}</p>
-                      <p>{teacher.phone}</p> {/* fallback if phone not stored */}
-                    </div>
-                  ))
-                ) : (
-                  <p>Loading...</p>
-                )}
+              teacherData.map((teacher, index) => (
+                <div key={teacher.id} className="teacher-contact">
+                  <strong>{teacher.name}</strong><br/>
+                  {teacher.email}<br/>
+                  {teacher.phone}
+                  {index < teacherData.length - 1 && <hr className="contact-divider" />}
+                </div>
+              ))
+            ) : (
+              <div>No instructors assigned</div>
+            )}
             </div>
         </div>
 
@@ -196,7 +230,7 @@ export default function ClassPage() {
                   {studentData.map((student) => {
                     const gradeEntry = gradesData.find(
                  
-                      (g) => g.studentIDs.id === student.id // match student by ID
+                      (g) => g.studentID.id === student.id // match student by ID
                     );
 
                     return (
