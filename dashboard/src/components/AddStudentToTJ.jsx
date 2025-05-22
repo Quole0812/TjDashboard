@@ -70,8 +70,8 @@ export default function AddStudentToTJ({fetchStudents}) {
                 />
               </div>
               <div className="button-group">
-                <button type="submit">Add</button>
-                <button type="button" onClick={() => setShowPopup(false)}>
+                <button type="submit" className="add-button">Add</button>
+                <button type="button" className="add-button" onClick={() => setShowPopup(false)}>
                   Cancel
               </button>
               </div>
