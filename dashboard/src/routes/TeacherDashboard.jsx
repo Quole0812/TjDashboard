@@ -449,7 +449,7 @@ const TeacherDashboard = () => {
       <div className="dashboard-header">
         <h1 className="dashboard-title">{classData ? `${classData.name} Dashboard` : "Loading..."}</h1>
         <Link to={`/courses/${id}`}>
-          <button className="class-btn">Class Page</button>
+          <button className="class-btn" >Class Page</button>
         </Link>
       </div>
       <hr className="dashboard-divider" />
