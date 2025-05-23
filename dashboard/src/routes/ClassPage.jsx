@@ -153,7 +153,7 @@ export default function ClassPage() {
   }
 
   function gpaToLetter(gpa) {
-    if (gpa >= 4) return "A+";
+    if (gpa >= 3.9) return "A+";
     if (gpa >= 3.85) return "A";
     if (gpa >= 3.7) return "A-";
     if (gpa >= 3.3) return "B+";
