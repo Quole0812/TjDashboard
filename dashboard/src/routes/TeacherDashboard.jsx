@@ -619,28 +619,31 @@ const TeacherDashboard = () => {
         <table className="dashboard-table">
           <thead>
             <tr>
-              <th>Instructor Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-              <th><FaEdit className="edit-icon-heading" /></th>
+              <th style={{width: "30%"}}>Instructor Name</th>
+              <th style={{width: "30%"}}>Email</th>
+              <th style={{width: "20%"}}>Phone Number</th>
+              <th style={{width: "10%"}}><FaEdit className="edit-icon-heading" /></th>
+              <th style={{width: "10%"}}></th>
             </tr>
           </thead>
+          </table>
+          <table className="dashboard-table">
           <tbody>
-            <tr className="table-gap-row">
+            {/* <tr className="table-gap-row">
               <td colSpan={5}></td>
-            </tr>
+            </tr> */}
             {dashboardTeachers.map((inst, idx) => (
               <tr key={inst.id || idx}>
-                <td>{inst.name}</td>
-                <td>{inst.email}</td>
-                <td>{inst.phone}</td>
-                <td>
+                <td style={{width: "30%"}}>{inst.name}</td>
+                <td style={{width: "30%"}}>{inst.email}</td>
+                <td style={{width: "20%"}}>{inst.phone}</td>
+                <td style={{width: "10%"}}>
                   <div className="tooltip">
                     <FaEdit className="edit-icon" onClick={() => handleEditTeacher(inst)} />
                     <span className="tooltiptext">Edit Teacher</span>
                   </div>
                 </td>
-                <td>
+                <td style={{width: "10%"}}>
                   <div className="tooltip">
                     <FaDeleteLeft className="delete-icon-heading" onClick={(e) => deleteTeacher(e, inst.id)} />
                     <span className="tooltiptext">Delete Teacher</span>
