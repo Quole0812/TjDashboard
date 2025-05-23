@@ -636,7 +636,7 @@ const TeacherDashboard = () => {
               <th style={{width: "30%"}}>Instructor Name</th>
               <th style={{width: "30%"}}>Email</th>
               <th style={{width: "20%"}}>Phone Number</th>
-              <th style={{width: "10%"}}><FaEdit className="edit-icon-heading" /></th>
+              <th style={{width: "10%"}}>Actions</th>
               <th style={{width: "10%"}}></th>
             </tr>
           </thead>
