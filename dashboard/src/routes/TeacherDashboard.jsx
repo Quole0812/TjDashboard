@@ -7,7 +7,7 @@ import { FaDeleteLeft } from 'react-icons/fa6'
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { query, getDocs, collection, where, addDoc } from "firebase/firestore";
 
@@ -344,9 +344,23 @@ const TeacherDashboard = () => {
       await updateDoc(classRef, {
         studentIDs: updatedStudentIds.map(id => doc(db, "students", id))
       });
+
+      // Delete the student's grade document from the grades collection
+      const gradeQuery = query(
+        collection(db, "grades"),
+        where("studentID", "==", studentRef),
+        where("classID", "==", classRef)
+      );
+      const gradeSnapshot = await getDocs(gradeQuery);
+      if (!gradeSnapshot.empty) {
+        const gradeDocId = gradeSnapshot.docs[0].id;
+        await deleteDoc(doc(db, "grades", gradeDocId));
+      }
       
       // update state
       setClassStudents(updatedStudentIds);
+      // Update gradesData state
+      setGradesData(prevGrades => prevGrades.filter(grade => grade.studentID.id !== studentId));
     } catch (err) {
       setError(err.message);
     }
